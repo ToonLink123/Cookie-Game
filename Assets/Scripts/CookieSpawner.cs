@@ -1,44 +1,44 @@
 // using System.Numerics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CookieSpawner : MonoBehaviour
 {
-    [SerializeField]private GameObject [] Cookie;
+    [SerializeField]private GameObject Cookie;
 
     [SerializeField] private float minY = -3f;
     [SerializeField] private float maxY = 3f;
 
-    [SerializeField] private Transform cookieSpawn;
     [SerializeField] private float minspawnDelay = 3f;
     [SerializeField] private float maxspwanDelay = 6f;
 
-    private float nextSpawnTime;
+    [SerializeField] private float spawnTimer = 0f;
+    [SerializeField] private float timeNextSpawn;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        SetNextSpawnTime();
+        timeNextSpawn = Random.Range(minspawnDelay, maxspwanDelay);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Time.time >= nextSpawnTime)
+      spawnTimer += Time.deltaTime;
+
+      if( spawnTimer > timeNextSpawn)
         {
-            SpawnRandomPattern();
-            SetNextSpawnTime();
+            Vector3 spawnPos = new Vector3(gameObject.transform.position.x, Random.Range(minY, maxY));
+            Instantiate(Cookie, spawnPos, Quaternion.identity);
+
+            spawnTimer = 0f;
+
+            timeNextSpawn = Random.Range(minspawnDelay, maxspwanDelay);
+
         }
+
     }
 
-    void SpawnRandomPattern()
-    {
-        if(cookieSpawn.Length == 0f) return;
-
-        int randomIndex = Random.Range(0, cookieSpawn.Length);
-        GameObject chosenPattern = cookieSpawn [randomIndex];
-
-        float randomY = Random.Range (minY,maxY);
-        Vector3 spawnPosition = new Vector3(spawnPosition.position.X, randomY, 0f)
-    }
+    
 
 }
