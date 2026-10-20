@@ -1,0 +1,2316 @@
+fileFormatVersion: 2
+guid: 845f6b3ba4b5d9d419b2b00be7d3f617
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4207200576674027353
+    second: hotairblalontemp_0
+  - first:
+      213: -4703657270686952072
+    second: hotairblalontemp_1
+  - first:
+      213: -8125336822768312599
+    second: hotairblalontemp_2
+  - first:
+      213: 7488093470696215840
+    second: hotairblalontemp_3
+  - first:
+      213: -5147176099353390868
+    second: hotairblalontemp_4
+  - first:
+      213: -6740148945278207878
+    second: hotairblalontemp_5
+  - first:
+      213: -7031829501007545855
+    second: hotairblalontemp_6
+  - first:
+      213: -1654103457005661891
+    second: hotairblalontemp_7
+  - first:
+      213: 6436182376125113309
+    second: hotairblalontemp_8
+  - first:
+      213: 2961042019671977974
+    second: hotairblalontemp_9
+  - first:
+      213: 8139583741600347270
+    second: hotairblalontemp_10
+  - first:
+      213: 2185491365889706225
+    second: hotairblalontemp_11
+  - first:
+      213: -4209056841249059470
+    second: hotairblalontemp_12
+  - first:
+      213: 501836185011970541
+    second: hotairblalontemp_13
+  - first:
+      213: -9069987467487093251
+    second: hotairblalontemp_14
+  - first:
+      213: -496820320258497750
+    second: hotairblalontemp_15
+  - first:
+      213: 9211281035222029504
+    second: hotairblalontemp_16
+  - first:
+      213: -1639432870264222482
+    second: hotairblalontemp_17
+  - first:
+      213: 4625340016630424702
+    second: hotairblalontemp_18
+  - first:
+      213: 2902284973937145011
+    second: hotairblalontemp_19
+  - first:
+      213: -1127943612701912866
+    second: hotairblalontemp_20
+  - first:
+      213: 4725403831269329553
+    second: hotairblalontemp_21
+  - first:
+      213: 9153216154797282720
+    second: hotairblalontemp_22
+  - first:
+      213: 3901978445113767673
+    second: hotairblalontemp_23
+  - first:
+      213: -2714617612755562348
+    second: hotairblalontemp_24
+  - first:
+      213: 4619033015011967580
+    second: hotairblalontemp_25
+  - first:
+      213: -3717688534828780079
+    second: hotairblalontemp_26
+  - first:
+      213: -7766265938510895164
+    second: hotairblalontemp_27
+  - first:
+      213: 3346614897349328010
+    second: hotairblalontemp_28
+  - first:
+      213: 4158861597230493912
+    second: hotairblalontemp_29
+  - first:
+      213: 9120293243956914081
+    second: hotairblalontemp_30
+  - first:
+      213: -658840394760168525
+    second: hotairblalontemp_31
+  - first:
+      213: -8458322602418740247
+    second: hotairblalontemp_32
+  - first:
+      213: -4767958630888874988
+    second: hotairblalontemp_33
+  - first:
+      213: 1053419461840636471
+    second: hotairblalontemp_34
+  - first:
+      213: -5974192901831371022
+    second: hotairblalontemp_35
+  - first:
+      213: -8762989148890689005
+    second: hotairblalontemp_36
+  - first:
+      213: -3179975654163293199
+    second: hotairblalontemp_37
+  - first:
+      213: 2158903637067300085
+    second: hotairblalontemp_38
+  - first:
+      213: 6724805018886563894
+    second: hotairblalontemp_39
+  - first:
+      213: 6750985624809391552
+    second: hotairblalontemp_40
+  - first:
+      213: -631310700229252824
+    second: hotairblalontemp_41
+  - first:
+      213: 9037134122205604201
+    second: hotairblalontemp_42
+  - first:
+      213: -5360832993913222973
+    second: hotairblalontemp_43
+  - first:
+      213: -5314432248729393915
+    second: hotairblalontemp_44
+  - first:
+      213: 466409349725595394
+    second: hotairblalontemp_45
+  - first:
+      213: 7333161525087409135
+    second: hotairblalontemp_46
+  - first:
+      213: 8988963681420166761
+    second: hotairblalontemp_47
+  - first:
+      213: -2096301956448427121
+    second: hotairblalontemp_48
+  - first:
+      213: -2873457326460830281
+    second: hotairblalontemp_49
+  - first:
+      213: 2864325043277625139
+    second: hotairblalontemp_50
+  - first:
+      213: -211250132801623400
+    second: hotairblalontemp_51
+  - first:
+      213: -7874263092556123299
+    second: hotairblalontemp_52
+  - first:
+      213: -7795307102760634921
+    second: hotairblalontemp_53
+  - first:
+      213: 5390519932703885503
+    second: hotairblalontemp_54
+  - first:
+      213: 7797930648386109656
+    second: hotairblalontemp_55
+  - first:
+      213: 1841400741118930368
+    second: hotairblalontemp_56
+  - first:
+      213: 4198854024780076304
+    second: hotairblalontemp_57
+  - first:
+      213: 8902425213797072480
+    second: hotairblalontemp_58
+  - first:
+      213: 1084567380169152130
+    second: hotairblalontemp_59
+  - first:
+      213: -7673832457381858646
+    second: hotairblalontemp_60
+  - first:
+      213: -8998392325585648013
+    second: hotairblalontemp_61
+  - first:
+      213: -962007300501799029
+    second: hotairblalontemp_62
+  - first:
+      213: 8727423173207895304
+    second: hotairblalontemp_63
+  - first:
+      213: 3782121647489678045
+    second: hotairblalontemp_64
+  - first:
+      213: -523871187578455616
+    second: hotairblalontemp_65
+  - first:
+      213: -3241318638511574454
+    second: hotairblalontemp_66
+  - first:
+      213: -2848287849608028689
+    second: hotairblalontemp_67
+  - first:
+      213: -8990883994110275908
+    second: hotairblalontemp_68
+  - first:
+      213: -4700654330903810307
+    second: hotairblalontemp_69
+  - first:
+      213: -3277409195436452512
+    second: hotairblalontemp_70
+  - first:
+      213: -8676817637010706513
+    second: hotairblalontemp_71
+  - first:
+      213: -7639245412244591985
+    second: hotairblalontemp_72
+  - first:
+      213: 202516064026290515
+    second: hotairblalontemp_73
+  - first:
+      213: -1259687868364324727
+    second: hotairblalontemp_74
+  - first:
+      213: 6479807123208984329
+    second: hotairblalontemp_75
+  - first:
+      213: 2009338917113494749
+    second: hotairblalontemp_76
+  - first:
+      213: 7095626911444677454
+    second: hotairblalontemp_77
+  - first:
+      213: 2823501594182103370
+    second: hotairblalontemp_78
+  - first:
+      213: -8682004742757916526
+    second: hotairblalontemp_79
+  - first:
+      213: -7851779715687569464
+    second: hotairblalontemp_80
+  - first:
+      213: 7016161727293565494
+    second: hotairblalontemp_81
+  - first:
+      213: -3282207701588394409
+    second: hotairblalontemp_82
+  - first:
+      213: 8282506797080254702
+    second: hotairblalontemp_83
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: hotairblalontemp_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 2248
+        width: 244
+        height: 243
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 957597f32aaf26a30800000000000000
+      internalID: 4207200576674027353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_1
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 196
+        width: 1803
+        height: 2295
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 875558322a049beb0800000000000000
+      internalID: -4703657270686952072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_2
+      rect:
+        serializedVersion: 2
+        x: 2264
+        y: 2366
+        width: 34
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ee5e76a5310d3f80800000000000000
+      internalID: -8125336822768312599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_3
+      rect:
+        serializedVersion: 2
+        x: 2288
+        y: 2390
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02515c5865d0be760800000000000000
+      internalID: 7488093470696215840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_4
+      rect:
+        serializedVersion: 2
+        x: 2412
+        y: 2399
+        width: 88
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce019a9cb9e8198b0800000000000000
+      internalID: -5147176099353390868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_5
+      rect:
+        serializedVersion: 2
+        x: 2207
+        y: 2308
+        width: 52
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a78f77fbe3e2672a0800000000000000
+      internalID: -6740148945278207878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_6
+      rect:
+        serializedVersion: 2
+        x: 2249
+        y: 2346
+        width: 23
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10a3557335ce96e90800000000000000
+      internalID: -7031829501007545855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_7
+      rect:
+        serializedVersion: 2
+        x: 2151
+        y: 2248
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d319e6f6ba17b09e0800000000000000
+      internalID: -1654103457005661891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_8
+      rect:
+        serializedVersion: 2
+        x: 2182
+        y: 2278
+        width: 41
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd3219e45c9e15950800000000000000
+      internalID: 6436182376125113309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_9
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 2162
+        width: 74
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ffad83570cb71920800000000000000
+      internalID: 2961042019671977974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_10
+      rect:
+        serializedVersion: 2
+        x: 2140
+        y: 1919
+        width: 245
+        height: 244
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68432a1a94c95f070800000000000000
+      internalID: 8139583741600347270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_11
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 2086
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f80a8b61dc645e10800000000000000
+      internalID: 2185491365889706225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_12
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 2111
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27d0ce97a1d6695c0800000000000000
+      internalID: -4209056841249059470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_13
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 2028
+        width: 52
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de16317f951e6f600800000000000000
+      internalID: 501836185011970541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_14
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 2066
+        width: 23
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfddf23047ee02280800000000000000
+      internalID: -9069987467487093251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_15
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 1968
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a23ebcd0d80fa19f0800000000000000
+      internalID: -496820320258497750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_16
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 1999
+        width: 41
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c493be4c4b05df70800000000000000
+      internalID: 9211281035222029504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_17
+      rect:
+        serializedVersion: 2
+        x: 2473
+        y: 1969
+        width: 27
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eec4dc69d709f39e0800000000000000
+      internalID: -1639432870264222482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_18
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 1648
+        width: 243
+        height: 242
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e74e7a03d32803040800000000000000
+      internalID: 4625340016630424702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_19
+      rect:
+        serializedVersion: 2
+        x: 2263
+        y: 1765
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b43a7c8eccf64820800000000000000
+      internalID: 2902284973937145011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_20
+      rect:
+        serializedVersion: 2
+        x: 2288
+        y: 1789
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed05b36a24db850f0800000000000000
+      internalID: -1127943612701912866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_21
+      rect:
+        serializedVersion: 2
+        x: 2412
+        y: 1798
+        width: 88
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19a041f8fb1049140800000000000000
+      internalID: 4725403831269329553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_22
+      rect:
+        serializedVersion: 2
+        x: 2207
+        y: 1707
+        width: 52
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a51f03d891c60f70800000000000000
+      internalID: 9153216154797282720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_23
+      rect:
+        serializedVersion: 2
+        x: 2249
+        y: 1745
+        width: 23
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f6bc36e8bc962630800000000000000
+      internalID: 3901978445113767673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_24
+      rect:
+        serializedVersion: 2
+        x: 2151
+        y: 1647
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4909fa2f9adb35ad0800000000000000
+      internalID: -2714617612755562348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_25
+      rect:
+        serializedVersion: 2
+        x: 2182
+        y: 1677
+        width: 41
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c520791fd0a1a1040800000000000000
+      internalID: 4619033015011967580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_26
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 1561
+        width: 74
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d5fcf789fd186cc0800000000000000
+      internalID: -3717688534828780079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_27
+      rect:
+        serializedVersion: 2
+        x: 2140
+        y: 1318
+        width: 245
+        height: 244
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c7a7dfb64ea83490800000000000000
+      internalID: -7766265938510895164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_28
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 1485
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8c798c9480917e20800000000000000
+      internalID: 3346614897349328010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_29
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 1510
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d0ffec869e37b930800000000000000
+      internalID: 4158861597230493912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_30
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 1428
+        width: 52
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a7627d426ac19e70800000000000000
+      internalID: 9120293243956914081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_31
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 1465
+        width: 23
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3bb54a2d6245bd6f0800000000000000
+      internalID: -658840394760168525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_32
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 1367
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e36c2f38600e9a80800000000000000
+      internalID: -8458322602418740247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_33
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 1398
+        width: 41
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41c5c1e03eec4ddb0800000000000000
+      internalID: -4767958630888874988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_34
+      rect:
+        serializedVersion: 2
+        x: 2473
+        y: 1368
+        width: 27
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73a8e765b6f7e9e00800000000000000
+      internalID: 1053419461840636471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_35
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 1046
+        width: 244
+        height: 243
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f65eaa5537671da0800000000000000
+      internalID: -5974192901831371022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_36
+      rect:
+        serializedVersion: 2
+        x: 2264
+        y: 1164
+        width: 34
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31294c12ccb936680800000000000000
+      internalID: -8762989148890689005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_37
+      rect:
+        serializedVersion: 2
+        x: 2288
+        y: 1188
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fbd433adf47ed3d0800000000000000
+      internalID: -3179975654163293199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_38
+      rect:
+        serializedVersion: 2
+        x: 2412
+        y: 1197
+        width: 88
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fcf1b76b67f5fd10800000000000000
+      internalID: 2158903637067300085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_39
+      rect:
+        serializedVersion: 2
+        x: 2207
+        y: 1106
+        width: 52
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6386f7ef88e435d50800000000000000
+      internalID: 6724805018886563894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_40
+      rect:
+        serializedVersion: 2
+        x: 2249
+        y: 1144
+        width: 23
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c5488258a150bd50800000000000000
+      internalID: 6750985624809391552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_41
+      rect:
+        serializedVersion: 2
+        x: 2151
+        y: 1046
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 829aee153422d37f0800000000000000
+      internalID: -631310700229252824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_42
+      rect:
+        serializedVersion: 2
+        x: 2182
+        y: 1076
+        width: 41
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96960a57a995a6d70800000000000000
+      internalID: 9037134122205604201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_43
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 960
+        width: 74
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c8cb918bce7a95b0800000000000000
+      internalID: -5360832993913222973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_44
+      rect:
+        serializedVersion: 2
+        x: 2140
+        y: 717
+        width: 245
+        height: 244
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 505aa9fd6085f36b0800000000000000
+      internalID: -5314432248729393915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_45
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 884
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 207a05a15d4097600800000000000000
+      internalID: 466409349725595394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_46
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 909
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe39567ed8f94c560800000000000000
+      internalID: 7333161525087409135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_47
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 826
+        width: 52
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 966cfe9b7d63fbc70800000000000000
+      internalID: 8988963681420166761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_48
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 864
+        width: 23
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f836fef2a7078e2e0800000000000000
+      internalID: -2096301956448427121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_49
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 766
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bdfe0b29cd6f18d0800000000000000
+      internalID: -2873457326460830281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_50
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 797
+        width: 41
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33771d5737020c720800000000000000
+      internalID: 2864325043277625139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_51
+      rect:
+        serializedVersion: 2
+        x: 2473
+        y: 767
+        width: 27
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89aea9b9f1d711df0800000000000000
+      internalID: -211250132801623400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_52
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 446
+        width: 243
+        height: 242
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d53393cdf6ff8b290800000000000000
+      internalID: -7874263092556123299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_53
+      rect:
+        serializedVersion: 2
+        x: 2263
+        y: 563
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d57fd8cd7181d390800000000000000
+      internalID: -7795307102760634921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_54
+      rect:
+        serializedVersion: 2
+        x: 2288
+        y: 587
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb84a7f8159feca40800000000000000
+      internalID: 5390519932703885503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_55
+      rect:
+        serializedVersion: 2
+        x: 2412
+        y: 596
+        width: 88
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d08f280c90d73c60800000000000000
+      internalID: 7797930648386109656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_56
+      rect:
+        serializedVersion: 2
+        x: 2207
+        y: 505
+        width: 52
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0cde887c738fd8910800000000000000
+      internalID: 1841400741118930368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_57
+      rect:
+        serializedVersion: 2
+        x: 2249
+        y: 543
+        width: 23
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0155cb23d73554a30800000000000000
+      internalID: 4198854024780076304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_58
+      rect:
+        serializedVersion: 2
+        x: 2151
+        y: 445
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06efadb9094cb8b70800000000000000
+      internalID: 8902425213797072480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_59
+      rect:
+        serializedVersion: 2
+        x: 2182
+        y: 475
+        width: 41
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28655f539482d0f00800000000000000
+      internalID: 1084567380169152130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_60
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 359
+        width: 74
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa234e7a902118590800000000000000
+      internalID: -7673832457381858646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_61
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 116
+        width: 245
+        height: 244
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 376cddbfad94f1380800000000000000
+      internalID: -8998392325585648013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_62
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 116
+        width: 245
+        height: 244
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8ff146057346a2f0800000000000000
+      internalID: -962007300501799029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_63
+      rect:
+        serializedVersion: 2
+        x: 1539
+        y: 116
+        width: 245
+        height: 244
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80da19bd2290e1970800000000000000
+      internalID: 8727423173207895304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_64
+      rect:
+        serializedVersion: 2
+        x: 2140
+        y: 116
+        width: 245
+        height: 244
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddaffef899bcc7430800000000000000
+      internalID: 3782121647489678045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_65
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 283
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c9f2543ee5dab8f0800000000000000
+      internalID: -523871187578455616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_66
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 308
+        width: 35
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a423aab1fd58403d0800000000000000
+      internalID: -3241318638511574454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_67
+      rect:
+        serializedVersion: 2
+        x: 125
+        y: 226
+        width: 52
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fed5d0aaa49d878d0800000000000000
+      internalID: -2848287849608028689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_68
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 263
+        width: 23
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbecf42a4a6f93380800000000000000
+      internalID: -8990883994110275908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_69
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 165
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfea39a8acbe3ceb0800000000000000
+      internalID: -4700654330903810307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_70
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 196
+        width: 41
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 065596283bd4482d0800000000000000
+      internalID: -3277409195436452512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_71
+      rect:
+        serializedVersion: 2
+        x: 670
+        y: 165
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fafe125b450c59780800000000000000
+      internalID: -8676817637010706513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_72
+      rect:
+        serializedVersion: 2
+        x: 1271
+        y: 165
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8ae023a5c2fbf590800000000000000
+      internalID: -7639245412244591985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_73
+      rect:
+        serializedVersion: 2
+        x: 1872
+        y: 165
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 359e899894b7fc200800000000000000
+      internalID: 202516064026290515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_74
+      rect:
+        serializedVersion: 2
+        x: 2473
+        y: 166
+        width: 27
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 980864ece80b48ee0800000000000000
+      internalID: -1259687868364324727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_75
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 0
+        width: 92
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 907daef3f36ece950800000000000000
+      internalID: 6479807123208984329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_76
+      rect:
+        serializedVersion: 2
+        x: 485
+        y: 0
+        width: 35
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddcfae3691b92eb10800000000000000
+      internalID: 2009338917113494749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_77
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 0
+        width: 92
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e43bc5be41bb87260800000000000000
+      internalID: 7095626911444677454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_78
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 0
+        width: 35
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4139f78db71f2720800000000000000
+      internalID: 2823501594182103370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_79
+      rect:
+        serializedVersion: 2
+        x: 1210
+        y: 0
+        width: 92
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29068a98fa2538780800000000000000
+      internalID: -8682004742757916526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_80
+      rect:
+        serializedVersion: 2
+        x: 1687
+        y: 0
+        width: 35
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c723d7f2ffd80390800000000000000
+      internalID: -7851779715687569464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_81
+      rect:
+        serializedVersion: 2
+        x: 1811
+        y: 0
+        width: 92
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63a2602fae96e5160800000000000000
+      internalID: 7016161727293565494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_82
+      rect:
+        serializedVersion: 2
+        x: 2288
+        y: 0
+        width: 35
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75eb5cb3c714372d0800000000000000
+      internalID: -3282207701588394409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hotairblalontemp_83
+      rect:
+        serializedVersion: 2
+        x: 2412
+        y: 0
+        width: 88
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee81ab1ac0061f270800000000000000
+      internalID: 8282506797080254702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      hotairblalontemp_0: 4207200576674027353
+      hotairblalontemp_1: -4703657270686952072
+      hotairblalontemp_10: 8139583741600347270
+      hotairblalontemp_11: 2185491365889706225
+      hotairblalontemp_12: -4209056841249059470
+      hotairblalontemp_13: 501836185011970541
+      hotairblalontemp_14: -9069987467487093251
+      hotairblalontemp_15: -496820320258497750
+      hotairblalontemp_16: 9211281035222029504
+      hotairblalontemp_17: -1639432870264222482
+      hotairblalontemp_18: 4625340016630424702
+      hotairblalontemp_19: 2902284973937145011
+      hotairblalontemp_2: -8125336822768312599
+      hotairblalontemp_20: -1127943612701912866
+      hotairblalontemp_21: 4725403831269329553
+      hotairblalontemp_22: 9153216154797282720
+      hotairblalontemp_23: 3901978445113767673
+      hotairblalontemp_24: -2714617612755562348
+      hotairblalontemp_25: 4619033015011967580
+      hotairblalontemp_26: -3717688534828780079
+      hotairblalontemp_27: -7766265938510895164
+      hotairblalontemp_28: 3346614897349328010
+      hotairblalontemp_29: 4158861597230493912
+      hotairblalontemp_3: 7488093470696215840
+      hotairblalontemp_30: 9120293243956914081
+      hotairblalontemp_31: -658840394760168525
+      hotairblalontemp_32: -8458322602418740247
+      hotairblalontemp_33: -4767958630888874988
+      hotairblalontemp_34: 1053419461840636471
+      hotairblalontemp_35: -5974192901831371022
+      hotairblalontemp_36: -8762989148890689005
+      hotairblalontemp_37: -3179975654163293199
+      hotairblalontemp_38: 2158903637067300085
+      hotairblalontemp_39: 6724805018886563894
+      hotairblalontemp_4: -5147176099353390868
+      hotairblalontemp_40: 6750985624809391552
+      hotairblalontemp_41: -631310700229252824
+      hotairblalontemp_42: 9037134122205604201
+      hotairblalontemp_43: -5360832993913222973
+      hotairblalontemp_44: -5314432248729393915
+      hotairblalontemp_45: 466409349725595394
+      hotairblalontemp_46: 7333161525087409135
+      hotairblalontemp_47: 8988963681420166761
+      hotairblalontemp_48: -2096301956448427121
+      hotairblalontemp_49: -2873457326460830281
+      hotairblalontemp_5: -6740148945278207878
+      hotairblalontemp_50: 2864325043277625139
+      hotairblalontemp_51: -211250132801623400
+      hotairblalontemp_52: -7874263092556123299
+      hotairblalontemp_53: -7795307102760634921
+      hotairblalontemp_54: 5390519932703885503
+      hotairblalontemp_55: 7797930648386109656
+      hotairblalontemp_56: 1841400741118930368
+      hotairblalontemp_57: 4198854024780076304
+      hotairblalontemp_58: 8902425213797072480
+      hotairblalontemp_59: 1084567380169152130
+      hotairblalontemp_6: -7031829501007545855
+      hotairblalontemp_60: -7673832457381858646
+      hotairblalontemp_61: -8998392325585648013
+      hotairblalontemp_62: -962007300501799029
+      hotairblalontemp_63: 8727423173207895304
+      hotairblalontemp_64: 3782121647489678045
+      hotairblalontemp_65: -523871187578455616
+      hotairblalontemp_66: -3241318638511574454
+      hotairblalontemp_67: -2848287849608028689
+      hotairblalontemp_68: -8990883994110275908
+      hotairblalontemp_69: -4700654330903810307
+      hotairblalontemp_7: -1654103457005661891
+      hotairblalontemp_70: -3277409195436452512
+      hotairblalontemp_71: -8676817637010706513
+      hotairblalontemp_72: -7639245412244591985
+      hotairblalontemp_73: 202516064026290515
+      hotairblalontemp_74: -1259687868364324727
+      hotairblalontemp_75: 6479807123208984329
+      hotairblalontemp_76: 2009338917113494749
+      hotairblalontemp_77: 7095626911444677454
+      hotairblalontemp_78: 2823501594182103370
+      hotairblalontemp_79: -8682004742757916526
+      hotairblalontemp_8: 6436182376125113309
+      hotairblalontemp_80: -7851779715687569464
+      hotairblalontemp_81: 7016161727293565494
+      hotairblalontemp_82: -3282207701588394409
+      hotairblalontemp_83: 8282506797080254702
+      hotairblalontemp_9: 2961042019671977974
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
