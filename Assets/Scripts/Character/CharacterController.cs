@@ -51,6 +51,10 @@ public class PlayerController : MonoBehaviour
         //clamp velocities between max and min described above
         vy = Mathf.Clamp(vy, -maxFallSpeed * m, maxRiseSpeed * m);
 
+<<<<<<< Updated upstream
+=======
+        // current height, check for out of bounds
+>>>>>>> Stashed changes
         float y = rb.position.y;
         if ((y <= minY && vy < 0f) || (y >= maxY && vy > 0f)) vy = 0f;
         if (y < minY || y > maxY) rb.position = new Vector2(rb.position.x, Mathf.Clamp(y, minY, maxY));
