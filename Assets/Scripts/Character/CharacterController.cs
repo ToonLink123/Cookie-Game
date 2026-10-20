@@ -16,7 +16,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float minMultiplier = 0.2f;
     [Range(0f, 1f)] public float slowMultiplier = 1f;
 
-    [SerializeField] GameObject burner;
+    [Header("Sprites")]
+    [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] Sprite happySprite;
+    [SerializeField] Sprite sadSprite;
 
     Rigidbody2D rb;
     bool holding;
@@ -29,6 +32,7 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = 0f;
         rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -37,8 +41,8 @@ public class PlayerController : MonoBehaviour
         var kb = Keyboard.current;
         var mouse = Mouse.current;
         holding = (kb != null && kb.spaceKey.isPressed) || (mouse != null && mouse.leftButton.isPressed);
-        // idk how we are doing this, but if we have a fire sprite for when we are floating up, set it to this
-        if (burner) burner.SetActive(holding);
+        bool goingUp = vy > 0f || (holding && vy == 0f);
+        spriteRenderer.sprite = goingUp ? happySprite : sadSprite;
     }
 
     void FixedUpdate()
@@ -51,6 +55,7 @@ public class PlayerController : MonoBehaviour
         //clamp velocities between max and min described above
         vy = Mathf.Clamp(vy, -maxFallSpeed * m, maxRiseSpeed * m);
 
+        // current height
         float y = rb.position.y;
         if ((y <= minY && vy < 0f) || (y >= maxY && vy > 0f)) vy = 0f;
         if (y < minY || y > maxY) rb.position = new Vector2(rb.position.x, Mathf.Clamp(y, minY, maxY));
