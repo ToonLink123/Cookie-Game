@@ -28,7 +28,9 @@ public class CookieSpawner : MonoBehaviour
 
       if( spawnTimer > timeNextSpawn)
         {
-            Vector3 spawnPos = new Vector3(gameObject.transform.position.x, Random.Range(minY, maxY));
+            Camera mainCamera = Camera.main;
+            float spawnX = mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect + 1f;
+            Vector3 spawnPos = new Vector3(spawnX, Random.Range(minY, maxY));
             Instantiate(Cookie, spawnPos, Quaternion.identity);
 
             spawnTimer = 0f;
