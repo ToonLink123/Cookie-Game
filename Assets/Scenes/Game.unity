@@ -411,6 +411,7 @@ MonoBehaviour:
   cookieSpawner: {fileID: 842327154}
   statsText: {fileID: 2000000053}
   restartButton: {fileID: 2000000060}
+  obstacleSpawner: {fileID: 2000000003}
 --- !u!114 &2000000003
 MonoBehaviour:
   m_ObjectHideFlags: 0
