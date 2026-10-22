@@ -17,6 +17,7 @@ public class GameplayManager : MonoBehaviour
     public static float overallSpeed = 1f;
     public static float characterSpeed = 1f;
     public static int cookieCount;
+    public static float metersTraveled = 0f;
 
     private static bool restarting;
 
@@ -31,6 +32,7 @@ public class GameplayManager : MonoBehaviour
         currentState = GameState.MainMenu;
         overallSpeed = 1f;
         characterSpeed = 1f;
+        metersTraveled = 0f;
         cookieCount = 0;
         statsText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         statsText.gameObject.SetActive(false);
@@ -49,7 +51,10 @@ public class GameplayManager : MonoBehaviour
 
     void Update()
     {
-        statsText.text = "Cookies: " + cookieCount + "\nSpeed: " + (characterSpeed * 100f).ToString("0") + "%" + "\nMeters: " + ((overallSpeed * 100f) - 100).ToString("0") + "m";
+        if (currentState != GameState.GameOver) {
+            metersTraveled = metersTraveled + (overallSpeed * 0.02f);
+        }
+        statsText.text = "Cookies: " + cookieCount + "\nSpeed: " + (characterSpeed * 100f).ToString("0") + "%" + "\nMeters: " + metersTraveled.ToString("0") + "m";
         restartButton.SetActive(currentState == GameState.GameOver);
         overallSpeed = overallSpeed + 0.0001f;
     }
