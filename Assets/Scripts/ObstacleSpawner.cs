@@ -5,8 +5,8 @@ public class ObstacleSpawner : MonoBehaviour
 {
     [SerializeField] private Sprite[] beanstalkSprites = new Sprite[0];
     [SerializeField] private Sprite[] birdFrames = new Sprite[0];
-    [SerializeField] private float minSpawnDelay = 8f;
-    [SerializeField] private float maxSpawnDelay = 14f;
+    [SerializeField] public float minSpawnDelay = 8f;
+    [SerializeField] public float maxSpawnDelay = 14f;
 
     private Camera mainCamera;
     private float spawnTimer;

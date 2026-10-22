@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,6 +19,8 @@ public class GameplayManager : MonoBehaviour
     public static float characterSpeed = 1f;
     public static int cookieCount;
     public static float metersTraveled = 0f;
+    public static float difficultyUpdater = 0f;
+
 
     private static bool restarting;
 
@@ -26,6 +29,7 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private CookieSpawner cookieSpawner;
     [SerializeField] private Text statsText;
     [SerializeField] private GameObject restartButton;
+    [SerializeField] private ObstacleSpawner obstacleSpawner;
 
     void Awake()
     {
@@ -34,6 +38,7 @@ public class GameplayManager : MonoBehaviour
         characterSpeed = 1f;
         metersTraveled = 0f;
         cookieCount = 0;
+        difficultyUpdater = 0f;
         statsText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         statsText.gameObject.SetActive(false);
         restartButton.SetActive(false);
@@ -51,8 +56,19 @@ public class GameplayManager : MonoBehaviour
 
     void Update()
     {
+
         if (currentState != GameState.GameOver) {
             metersTraveled = metersTraveled + (overallSpeed * 0.02f);
+            difficultyUpdater = difficultyUpdater + (overallSpeed * 0.02f);
+            if (difficultyUpdater >= 500) {
+                if (obstacleSpawner.maxSpawnDelay > 1) {
+                    obstacleSpawner.maxSpawnDelay = obstacleSpawner.maxSpawnDelay - 0.2f;
+                }
+                if (obstacleSpawner.minSpawnDelay > 1) {
+                    obstacleSpawner.minSpawnDelay = obstacleSpawner.minSpawnDelay - 0.2f;
+                }
+                difficultyUpdater = 0f;
+            }
         }
         statsText.text = "Cookies: " + cookieCount + "\nSpeed: " + (characterSpeed * 100f).ToString("0") + "%" + "\nMeters: " + metersTraveled.ToString("0") + "m";
         restartButton.SetActive(currentState == GameState.GameOver);
