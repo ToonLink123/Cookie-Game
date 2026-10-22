@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        float m = GameplayManager.overallSpeed;
+        float m = GameplayManager.characterSpeed;
         if (takingOff)
         {
             float takeoffY = Mathf.MoveTowards(rb.position.y, 0f, takeoffSpeed * m * Time.fixedDeltaTime);
@@ -96,6 +96,6 @@ public class PlayerController : MonoBehaviour
         if (GameplayManager.currentState != GameState.Gameplay) return;
 
         GameplayManager.cookieCount++;
-        GameplayManager.overallSpeed = Mathf.Max(minMultiplier, GameplayManager.overallSpeed - slowPerCookie);
+        GameplayManager.characterSpeed = Mathf.Max(minMultiplier, GameplayManager.characterSpeed - slowPerCookie);
     }
 }
