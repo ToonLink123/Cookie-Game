@@ -173,12 +173,10 @@ MonoBehaviour:
   thrust: 20
   gravity: 15
   maxRiseSpeed: 7
-  maxFallSpeed: 9
   minY: -4
   maxY: 4
   slowPerCookie: 0.07
   minMultiplier: 0.2
-  slowMultiplier: 1
   spriteRenderer: {fileID: 1468127365677604612}
   happySprite: {fileID: -1383928507000458067, guid: ff42ba2e5a12f2440a597b81c0760f9d, type: 3}
   sadSprite: {fileID: 2206905436546137930, guid: f4fc6152cea9fde48912b1fb02e1861d, type: 3}

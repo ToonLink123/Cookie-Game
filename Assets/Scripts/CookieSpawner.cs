@@ -1,4 +1,3 @@
-// using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -15,16 +14,16 @@ public class CookieSpawner : MonoBehaviour
     [SerializeField] private float spawnTimer = 0f;
     [SerializeField] private float timeNextSpawn;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         timeNextSpawn = Random.Range(minspawnDelay, maxspwanDelay);
     }
 
-    // Update is called once per frame
     void Update()
     {
-      spawnTimer += Time.deltaTime;
+      if (GameplayManager.currentState != GameState.Gameplay) return;
+
+      spawnTimer += Time.deltaTime * GameplayManager.overallSpeed;
 
       if( spawnTimer > timeNextSpawn)
         {
