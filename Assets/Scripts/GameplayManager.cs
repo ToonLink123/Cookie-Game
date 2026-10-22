@@ -21,8 +21,11 @@ public class GameplayManager : MonoBehaviour
     public static float metersTraveled = 0f;
     public static float difficultyUpdater = 0f;
 
+    private const string HighScoreKey = "CookieGame.HighScoreMeters";
+    public static float HighScore { get; private set; }
 
     private static bool restarting;
+    private bool gameOverHandled;
 
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject player;
@@ -30,6 +33,7 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private Text statsText;
     [SerializeField] private GameObject restartButton;
     [SerializeField] private ObstacleSpawner obstacleSpawner;
+    [SerializeField] private GameUI gameUI;
 
     void Awake()
     {
@@ -39,11 +43,13 @@ public class GameplayManager : MonoBehaviour
         metersTraveled = 0f;
         cookieCount = 0;
         difficultyUpdater = 0f;
+        HighScore = PlayerPrefs.GetFloat(HighScoreKey, 0f);
         statsText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         statsText.gameObject.SetActive(false);
         restartButton.SetActive(false);
         player.SetActive(false);
         cookieSpawner.enabled = false;
+        gameUI.Initialize(HighScore);
     }
 
     void Start()
@@ -57,28 +63,47 @@ public class GameplayManager : MonoBehaviour
     void Update()
     {
 
-        if (currentState != GameState.GameOver) {
-            metersTraveled = metersTraveled + (overallSpeed * 0.02f);
-            difficultyUpdater = difficultyUpdater + (overallSpeed * 0.02f);
-            if (difficultyUpdater >= 500) {
-                if (obstacleSpawner.maxSpawnDelay > 1) {
-                    obstacleSpawner.maxSpawnDelay = obstacleSpawner.maxSpawnDelay - 0.2f;
-                }
-                if (obstacleSpawner.minSpawnDelay > 1) {
-                    obstacleSpawner.minSpawnDelay = obstacleSpawner.minSpawnDelay - 0.2f;
-                }
+        if (currentState == GameState.Gameplay)
+        {
+            float distance = overallSpeed * 1.2f * Time.deltaTime;
+            metersTraveled += distance;
+            difficultyUpdater += distance;
+            if (difficultyUpdater >= 500f)
+            {
+                obstacleSpawner.maxSpawnDelay = Mathf.Max(1f, obstacleSpawner.maxSpawnDelay - 0.2f);
+                obstacleSpawner.minSpawnDelay = Mathf.Max(1f, obstacleSpawner.minSpawnDelay - 0.2f);
                 difficultyUpdater = 0f;
             }
+            overallSpeed += 0.006f * Time.deltaTime;
         }
-        statsText.text = "Cookies: " + cookieCount + "\nSpeed: " + (characterSpeed * 100f).ToString("0") + "%" + "\nMeters: " + metersTraveled.ToString("0") + "m";
-        restartButton.SetActive(currentState == GameState.GameOver);
-        overallSpeed = overallSpeed + 0.0001f;
+
+        if (currentState == GameState.GameOver && !gameOverHandled)
+        {
+            gameOverHandled = true;
+            bool newHighScore = metersTraveled > HighScore;
+            if (newHighScore)
+            {
+                HighScore = metersTraveled;
+                PlayerPrefs.SetFloat(HighScoreKey, HighScore);
+                PlayerPrefs.Save();
+            }
+
+            cookieSpawner.enabled = false;
+            gameUI.ShowGameOver(HighScore, newHighScore);
+            restartButton.SetActive(true);
+        }
+
+        statsText.text = "Speed: " + (characterSpeed * 100f).ToString("0") + "%";
+        gameUI.UpdateTrackers(cookieCount, metersTraveled);
     }
 
     public void StartGame()
     {
+        if (currentState != GameState.MainMenu) return;
+
         currentState = GameState.Gameplay;
         mainMenu.SetActive(false);
+        gameUI.ShowGameplay();
         statsText.gameObject.SetActive(true);
         player.SetActive(true);
         cookieSpawner.enabled = true;

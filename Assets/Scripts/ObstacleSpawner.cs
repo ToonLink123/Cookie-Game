@@ -5,6 +5,7 @@ public class ObstacleSpawner : MonoBehaviour
 {
     [SerializeField] private Sprite[] beanstalkSprites = new Sprite[0];
     [SerializeField] private Sprite[] birdFrames = new Sprite[0];
+    [SerializeField] private Sprite cometSprite;
     [SerializeField] public float minSpawnDelay = 8f;
     [SerializeField] public float maxSpawnDelay = 14f;
 
@@ -14,7 +15,7 @@ public class ObstacleSpawner : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
-        if (mainCamera == null || beanstalkSprites.Length == 0 || birdFrames.Length == 0)
+        if (mainCamera == null || beanstalkSprites.Length == 0 || birdFrames.Length == 0 || cometSprite == null)
         {
             enabled = false;
             return;
@@ -36,17 +37,21 @@ public class ObstacleSpawner : MonoBehaviour
 
     private void SpawnObstacle()
     {
-        bool bird = Random.value < 0.5f;
-        Sprite sprite = bird ? birdFrames[0] : beanstalkSprites[Random.Range(0, beanstalkSprites.Length)];
-        GameObject obstacle = new GameObject(bird ? "Bird" : "Beanstalk");
+        int kind = Random.Range(0, 3);
+        bool bird = kind == 0;
+        bool comet = kind == 1;
+        bool airborne = bird || comet;
+        Sprite sprite = bird ? birdFrames[0]
+            : comet ? cometSprite : beanstalkSprites[Random.Range(0, beanstalkSprites.Length)];
+        GameObject obstacle = new GameObject(bird ? "Bird" : comet ? "Comet" : "Beanstalk");
         SpriteRenderer spriteRenderer = obstacle.AddComponent<SpriteRenderer>();
         spriteRenderer.sprite = sprite;
         spriteRenderer.sortingOrder = 1;
 
-        float height = bird ? 1.2f : Random.Range(3f, 6f);
+        float height = bird ? 1.2f : comet ? 1.8f : Random.Range(3f, 6f);
         obstacle.transform.localScale = Vector3.one * (height / sprite.bounds.size.y);
         float halfHeight = spriteRenderer.bounds.extents.y;
-        float y = bird
+        float y = airborne
             ? Random.Range(mainCamera.transform.position.y - mainCamera.orthographicSize + halfHeight + 0.5f,
                 mainCamera.transform.position.y + mainCamera.orthographicSize - halfHeight - 0.5f)
             : mainCamera.transform.position.y - mainCamera.orthographicSize + halfHeight;
@@ -74,7 +79,7 @@ public class ObstacleSpawner : MonoBehaviour
         }
 
         Obstacle movement = obstacle.AddComponent<Obstacle>();
-        movement.speed = bird ? 5f : 3f;
+        movement.speed = comet ? 6f : bird ? 5f : 3f;
         if (bird) movement.frames = birdFrames;
     }
 }
