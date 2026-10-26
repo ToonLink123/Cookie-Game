@@ -43,7 +43,7 @@ public class GameUI : MonoBehaviour
     public void Initialize(float highScore, Sprite cookieSprite, RectTransform startButton)
     {
         this.startButton = startButton;
-        font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        font = LoadFont();
         trackers = CreateRect("Trackers", transform, Vector2.zero, Vector2.zero).gameObject;
         Stretch(trackers.GetComponent<RectTransform>(), Vector2.zero, Vector2.one);
         cookiesText = CreateTracker("Cookies", cookieTrackerSprite, new Vector2(0f, 1f),
@@ -118,6 +118,12 @@ public class GameUI : MonoBehaviour
             new Vector2(820f, 290f), 34);
         facts.SetActive(false);
         UpdateTrackers(0, 0f);
+    }
+
+    // Hand-drawn font matching the lettering in the UI sprites; built by Tools/CookieFont.
+    public static Font LoadFont()
+    {
+        return Resources.Load<Font>("CookieFont");
     }
 
     void Update()

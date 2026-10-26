@@ -3,6 +3,7 @@ using UnityEngine;
 public class Obstacle : MonoBehaviour
 {
     [HideInInspector] public float speed = 3f;
+    [HideInInspector] public Vector2 direction = Vector2.left;
     [HideInInspector] public Sprite[] frames;
 
     private SpriteRenderer spriteRenderer;
@@ -20,7 +21,7 @@ public class Obstacle : MonoBehaviour
         if (GameplayManager.currentState != GameState.Gameplay) return;
 
         float deltaTime = Time.deltaTime * GameplayManager.overallSpeed;
-        transform.position += Vector3.left * speed * deltaTime;
+        transform.position += (Vector3)(direction * speed * deltaTime);
         if (frames != null && frames.Length > 0)
         {
             animationTime += deltaTime;
@@ -28,6 +29,7 @@ public class Obstacle : MonoBehaviour
         }
 
         float leftEdge = mainCamera.transform.position.x - mainCamera.orthographicSize * mainCamera.aspect;
-        if (spriteRenderer.bounds.max.x < leftEdge) Destroy(gameObject);
+        float bottomEdge = mainCamera.transform.position.y - mainCamera.orthographicSize;
+        if (spriteRenderer.bounds.max.x < leftEdge || spriteRenderer.bounds.max.y < bottomEdge) Destroy(gameObject);
     }
 }

@@ -51,7 +51,7 @@ public class GameplayManager : MonoBehaviour
         trackerCookiesHit = 0;
         HighScore = PlayerPrefs.GetFloat(HighScoreKey, 0f);
         carriedSlow = PlayerPrefs.GetFloat(NextRunSlowKey, 0f);
-        statsText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        statsText.font = GameUI.LoadFont();
         statsText.gameObject.SetActive(false);
         restartButton.SetActive(false);
         player.SetActive(false);
