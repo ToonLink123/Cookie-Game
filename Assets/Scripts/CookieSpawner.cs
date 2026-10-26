@@ -24,6 +24,8 @@ public class CookieSpawner : MonoBehaviour
 
     private PlayerController player;
 
+    public Sprite CookieSprite => Cookie.GetComponent<SpriteRenderer>().sprite;
+
     void Start()
     {
         timeNextSpawn = Random.Range(minspawnDelay, maxspwanDelay);

@@ -43,24 +43,33 @@ public class Cookie : MonoBehaviour
         currentSpeed = speed;
     }
 
+    public static Color Tint(CookieType type)
+    {
+        switch (type)
+        {
+            case CookieType.ThirdParty: return new Color(1f, 0.35f, 0.4f);
+            case CookieType.Session: return new Color(0.75f, 0.45f, 1f);
+            case CookieType.Persistent: return new Color(0.55f, 0.9f, 0.4f);
+            default: return Color.white;
+        }
+    }
+
     public void Setup(CookieType cookieType, Transform player)
     {
         type = cookieType;
+        color = Tint(type);
         switch (type)
         {
             case CookieType.ThirdParty:
-                color = new Color(1f, 0.35f, 0.4f);
                 target = player;
                 tracking = player != null;
                 if (tracking) trackingStartDistance = Vector2.Distance(transform.position, player.position);
                 CookieEye.Attach(spriteRenderer, player);
                 break;
             case CookieType.Session:
-                color = new Color(0.75f, 0.45f, 1f);
                 currentSpeed = speed * SessionSpeed;
                 break;
             case CookieType.Persistent:
-                color = new Color(0.55f, 0.9f, 0.4f);
                 currentSpeed = speed * PersistentSpeed;
                 transform.localScale *= PersistentScale;
                 returnsLeft = PersistentReturns;

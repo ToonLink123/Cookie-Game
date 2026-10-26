@@ -56,7 +56,7 @@ public class GameplayManager : MonoBehaviour
         restartButton.SetActive(false);
         player.SetActive(false);
         cookieSpawner.enabled = false;
-        gameUI.Initialize(HighScore);
+        gameUI.Initialize(HighScore, cookieSpawner.CookieSprite, mainMenu.GetComponent<RectTransform>());
     }
 
     void Start()

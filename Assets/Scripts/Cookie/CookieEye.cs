@@ -8,13 +8,19 @@ public class CookieEye : MonoBehaviour
     private const int PupilSize = 24;
     private const float PixelsPerUnit = 64f;
     private const float OutlineWidth = 4f;
-    private const float PupilRangeX = 0.2f;
     private const float PupilRangeY = 0.12f;
     private const float BlinkDuration = 0.18f;
+
+    // Eye width as a fraction of the cookie's width, and how far the pupil can look sideways.
+    public const float SizeOnCookie = 0.6f;
+    public const float PupilRangeX = 0.2f;
 
     private static readonly Color Ink = new Color(0.06f, 0.10f, 0.16f);
     private static Sprite eyeSprite;
     private static Sprite pupilSprite;
+
+    public static Sprite EyeSprite => eyeSprite != null ? eyeSprite : eyeSprite = DrawEye();
+    public static Sprite PupilSprite => pupilSprite != null ? pupilSprite : pupilSprite = DrawPupil();
 
     private Transform pupil;
     private Transform target;
@@ -23,19 +29,16 @@ public class CookieEye : MonoBehaviour
 
     public static void Attach(SpriteRenderer cookie, Transform target)
     {
-        if (eyeSprite == null) eyeSprite = DrawEye();
-        if (pupilSprite == null) pupilSprite = DrawPupil();
-
         GameObject eyeObject = new GameObject("Tracker Eye");
         eyeObject.transform.SetParent(cookie.transform, false);
         CookieEye eye = eyeObject.AddComponent<CookieEye>();
         eye.target = target;
-        eye.size = cookie.sprite.bounds.size.x * 0.6f;
+        eye.size = cookie.sprite.bounds.size.x * SizeOnCookie;
         eye.nextBlink = Random.Range(0.5f, 2f);
         eye.transform.localScale = Vector3.one * eye.size;
 
-        AddLayer(eyeObject.transform, "Eye White", eyeSprite, cookie, 1);
-        eye.pupil = AddLayer(eyeObject.transform, "Pupil", pupilSprite, cookie, 2);
+        AddLayer(eyeObject.transform, "Eye White", EyeSprite, cookie, 1);
+        eye.pupil = AddLayer(eyeObject.transform, "Pupil", PupilSprite, cookie, 2);
     }
 
     void Update()
