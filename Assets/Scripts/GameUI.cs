@@ -43,6 +43,7 @@ public class GameUI : MonoBehaviour
     private Sprite cookieSprite;
     private GameObject eatenPanel;
     private Text[] eatenCounts;
+    private GameObject pauseScreen;
 
     public void Initialize(float highScore, Sprite cookieSprite, RectTransform startButton)
     {
@@ -150,6 +151,36 @@ public class GameUI : MonoBehaviour
         UpdateTrackers(0, 0f);
     }
 
+    // Pause screen: dims the game, with resume and quit to home buttons.
+    public void CreatePauseScreen(UnityEngine.Events.UnityAction resume, UnityEngine.Events.UnityAction quitToHome)
+    {
+        // Parented to the canvas itself and drawn last, so it covers everything else on screen.
+        RectTransform screen = CreateRect("PauseScreen", GetComponentInParent<Canvas>().transform,
+            Vector2.zero, Vector2.zero);
+        Stretch(screen, Vector2.zero, Vector2.one);
+        Image dim = screen.gameObject.AddComponent<Image>();
+        dim.color = new Color(0f, 0f, 0f, 0.5f);   // also stops clicks reaching anything underneath
+        pauseScreen = screen.gameObject;
+
+        Image panel = CreateImage("Panel", screen, factsBoxSprite, new Vector2(0.5f, 0.5f), Vector2.zero,
+            new Vector2(960f, 320f));
+        Text title = CreateText("Title", panel.transform, new Vector2(0.5f, 0.5f), new Vector2(0f, 70f),
+            new Vector2(400f, 70f), 56);
+        title.text = "<b>Paused</b>";
+
+        CreateSpriteButton("Resume", panel.transform, Resources.Load<Sprite>("ResumeButton"),
+            new Vector2(-190f, -45f), resume);
+        CreateSpriteButton("Home", panel.transform, Resources.Load<Sprite>("HomeButton"),
+            new Vector2(190f, -45f), quitToHome);
+        pauseScreen.SetActive(false);
+    }
+
+    public void ShowPause(bool paused)
+    {
+        pauseScreen.transform.SetAsLastSibling();
+        pauseScreen.SetActive(paused);
+    }
+
     // Hand-drawn font matching the lettering in the UI sprites; built by Tools/CookieFont.
     public static Font LoadFont()
     {
@@ -235,6 +266,19 @@ public class GameUI : MonoBehaviour
             new Vector2(90f * side, 0f), new Vector2(48f, 36f));
         arrow.rectTransform.localScale = new Vector3(side, 1f, 1f);
         return buttonRect.gameObject;
+    }
+
+    // A sprite button that looks and reacts like the scene's Start and Restart buttons (sprite at 4x).
+    private void CreateSpriteButton(string name, Transform parent, Sprite sprite, Vector2 position,
+        UnityEngine.Events.UnityAction onClick)
+    {
+        Image image = CreateImage(name + "Button", parent, sprite, new Vector2(0.5f, 0.5f), position,
+            sprite.rect.size * 4f);
+        image.preserveAspect = true;
+        image.raycastTarget = true;
+        Button button = image.gameObject.AddComponent<Button>();
+        button.targetGraphic = image;
+        button.onClick.AddListener(onClick);
     }
 
     private Text CreateTracker(string label, Sprite sprite, Vector2 anchor, Vector2 position)

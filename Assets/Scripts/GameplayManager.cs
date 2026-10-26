@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -21,6 +22,7 @@ public class GameplayManager : MonoBehaviour
     public static float metersTraveled = 0f;
     public static float difficultyUpdater = 0f;
     public static int[] cookiesEaten;   // this run, indexed by CookieType
+    public static int trackerCookiesHit;   // since the last Clear Browsing Data; drives the ads
 
     private const string HighScoreKey = "CookieGame.HighScoreMeters";
     public static float HighScore { get; private set; }
@@ -50,6 +52,7 @@ public class GameplayManager : MonoBehaviour
         cookieCount = 0;
         difficultyUpdater = 0f;
         cookiesEaten = new int[System.Enum.GetValues(typeof(CookieType)).Length];
+        trackerCookiesHit = 0;
         HighScore = PlayerPrefs.GetFloat(HighScoreKey, 0f);
         carriedSlow = PlayerPrefs.GetFloat(NextRunSlowKey, 0f);
         statsText.font = GameUI.LoadFont();
@@ -59,6 +62,7 @@ public class GameplayManager : MonoBehaviour
         player.SetActive(false);
         cookieSpawner.enabled = false;
         gameUI.Initialize(HighScore, cookieSpawner.CookieSprite, mainMenu.GetComponent<RectTransform>());
+        gameUI.CreatePauseScreen(ResumeGame, GoToHomeScreen);
     }
 
     void Start()
@@ -71,6 +75,13 @@ public class GameplayManager : MonoBehaviour
 
     void Update()
     {
+        // Esc or P pauses a run, and resumes it again.
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard != null && (keyboard.escapeKey.wasPressedThisFrame || keyboard.pKey.wasPressedThisFrame))
+        {
+            if (currentState == GameState.Gameplay) PauseGame();
+            else if (currentState == GameState.Paused) ResumeGame();
+        }
 
         if (currentState == GameState.Gameplay)
         {
@@ -138,9 +149,26 @@ public class GameplayManager : MonoBehaviour
     // Reloading without the restarting flag lands on the home screen instead of a new run.
     public void GoToHomeScreen()
     {
-        if (currentState != GameState.GameOver) return;
+        if (currentState != GameState.GameOver && currentState != GameState.Paused) return;
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    // Everything that moves already stops whenever the state isn't Gameplay.
+    public void PauseGame()
+    {
+        if (currentState != GameState.Gameplay) return;
+
+        currentState = GameState.Paused;
+        gameUI.ShowPause(true);
+    }
+
+    public void ResumeGame()
+    {
+        if (currentState != GameState.Paused) return;
+
+        currentState = GameState.Gameplay;
+        gameUI.ShowPause(false);
     }
 
     // A copy of the restart button, just below it, that goes back to the home screen.

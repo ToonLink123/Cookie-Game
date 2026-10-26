@@ -31,18 +31,26 @@ public class CookieSpawner : MonoBehaviour
     [SerializeField] private float fullOnScreenDistance = 300f;
     [SerializeField] private float groupSpread = 4f;
 
+    [Header("Clear Browsing Data")]
+    [SerializeField] private float firstClearDataDistance = 100f;
+    [SerializeField] private float clearDataGapGrowth = 50f;
+    [SerializeField] private float clearDataSizeVsSmallestCookie = 2.5f;
+
     [Header("Angled cookies")]
     [SerializeField, Range(0f, 1f)] private float angledChance = 0.4f;
     [SerializeField] private float minAngle = 10f;
     [SerializeField] private float maxAngle = 25f;
 
     private PlayerController player;
+    private float clearDataGap;
+    private float nextClearData;
 
     public Sprite CookieSprite => cookiePrefab.GetComponent<SpriteRenderer>().sprite;
 
     void Start()
     {
         timeNextSpawn = Random.Range(minspawnDelay, maxspwanDelay);
+        clearDataGap = nextClearData = firstClearDataDistance;
     }
 
     void Update()
@@ -50,6 +58,14 @@ public class CookieSpawner : MonoBehaviour
       if (GameplayManager.currentState != GameState.Gameplay) return;
 
       spawnTimer += Time.deltaTime * GameplayManager.overallSpeed;
+
+      // Clear Browsing Data gets rarer as the run goes on: at 100 m, then 150 m later, then 200 m later...
+      if (GameplayManager.metersTraveled >= nextClearData)
+        {
+            SpawnClearData();
+            clearDataGap += clearDataGapGrowth;
+            nextClearData += clearDataGap;
+        }
 
       // How many cookies should be on screen ramps linearly from the start range to the full range.
       float ramp = Mathf.Clamp01(GameplayManager.metersTraveled / fullOnScreenDistance);
@@ -68,6 +84,17 @@ public class CookieSpawner : MonoBehaviour
 
         }
 
+    }
+
+    // Sends the pickup at the player's current height, sized against the smallest a cookie can be.
+    private void SpawnClearData()
+    {
+        if (player == null) player = FindAnyObjectByType<PlayerController>();
+
+        SpriteRenderer cookie = cookiePrefab.GetComponent<SpriteRenderer>();
+        float smallestCookie = cookie.sprite.bounds.size.x * cookiePrefab.transform.localScale.x * Cookie.MinSizeScale;
+        float y = player != null ? Mathf.Clamp(player.transform.position.y, minY, maxY) : 0f;
+        ClearDataPickup.Spawn(y, smallestCookie * clearDataSizeVsSmallestCookie);
     }
 
     // Spreads the group over the spawn height in lanes, staggered sideways into a loose cluster.

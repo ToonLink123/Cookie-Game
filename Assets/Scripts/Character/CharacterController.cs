@@ -155,11 +155,27 @@ public class PlayerController : MonoBehaviour
             case CookieType.ThirdParty:
                 permanentSlow += slowPerCookie;
                 trackedTimer = trackedTime;
+                GameplayManager.trackerCookiesHit++;
                 break;
             default:
                 permanentSlow += slowPerCookie;
                 break;
         }
+        UpdateSpeed();
+    }
+
+    // The "Clear Browsing Data" pickup: back to full speed, no more tracking or ads, and the
+    // persistent-cookie slowdown saved for next game is gone.
+    public void ClearBrowsingData()
+    {
+        if (GameplayManager.currentState != GameState.Gameplay) return;
+
+        permanentSlow = 0f;
+        temporarySlow = 0f;
+        trackedTimer = 0f;
+        GameplayManager.trackerCookiesHit = 0;
+        persistentEaten = 0;
+        GameplayManager.SaveNextRunSlow(0f);
         UpdateSpeed();
     }
 

@@ -16,7 +16,7 @@ public class Cookie : MonoBehaviour
     private const float PersistentSpeed = 0.6f;
     private const float PersistentScale = 2.8f;
     // Each cookie's size is randomly between 10% smaller and 70% bigger than the prefab.
-    private const float MinSizeScale = 0.9f;
+    public const float MinSizeScale = 0.9f;
     private const float MaxSizeScale = 1.7f;
     private const float RollSpeed = 0.5f;   // spin rate compared to true rolling
     private const int PersistentReturns = 2;

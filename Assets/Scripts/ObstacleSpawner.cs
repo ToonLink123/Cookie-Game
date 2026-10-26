@@ -68,7 +68,7 @@ public class ObstacleSpawner : MonoBehaviour
         bool comet = kind == 1;
         bool airborne = bird || comet;
         // Each tracker cookie eaten makes it likelier this obstacle shows up as an ad of the same size.
-        bool ad = Random.Range(0, trackerHitsForAllAds) < GameplayManager.cookiesEaten[(int)CookieType.ThirdParty];
+        bool ad = Random.Range(0, trackerHitsForAllAds) < GameplayManager.trackerCookiesHit;
         Sprite sprite = bird ? birdFrames[0]
             : comet ? cometSprite : beanstalkSprites[Random.Range(0, beanstalkSprites.Length)];
         GameObject obstacle = new GameObject(ad ? "Ad" : bird ? "Bird" : comet ? "Comet" : "Beanstalk");
