@@ -1,9 +1,10 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CookieSpawner : MonoBehaviour
 {
-    [SerializeField]private GameObject Cookie;
+    [SerializeField, FormerlySerializedAs("Cookie")] private GameObject cookiePrefab;
 
     [SerializeField] private float minY = -3f;
     [SerializeField] private float maxY = 3f;
@@ -22,9 +23,22 @@ public class CookieSpawner : MonoBehaviour
     [SerializeField] private float thirdPartyUnlockDistance = 100f;
     [SerializeField] private float persistentUnlockDistance = 220f;
 
+    [Header("Cookies on screen")]
+    [SerializeField] private int startMinOnScreen = 1;
+    [SerializeField] private int startMaxOnScreen = 3;
+    [SerializeField] private int fullMinOnScreen = 5;
+    [SerializeField] private int fullMaxOnScreen = 7;
+    [SerializeField] private float fullOnScreenDistance = 300f;
+    [SerializeField] private float groupSpread = 4f;
+
+    [Header("Angled cookies")]
+    [SerializeField, Range(0f, 1f)] private float angledChance = 0.4f;
+    [SerializeField] private float minAngle = 10f;
+    [SerializeField] private float maxAngle = 25f;
+
     private PlayerController player;
 
-    public Sprite CookieSprite => Cookie.GetComponent<SpriteRenderer>().sprite;
+    public Sprite CookieSprite => cookiePrefab.GetComponent<SpriteRenderer>().sprite;
 
     void Start()
     {
@@ -37,19 +51,16 @@ public class CookieSpawner : MonoBehaviour
 
       spawnTimer += Time.deltaTime * GameplayManager.overallSpeed;
 
-      if( spawnTimer > timeNextSpawn)
-        {
-            if (player == null) player = FindAnyObjectByType<PlayerController>();
+      // How many cookies should be on screen ramps linearly from the start range to the full range.
+      float ramp = Mathf.Clamp01(GameplayManager.metersTraveled / fullOnScreenDistance);
+      int fewest = Mathf.RoundToInt(Mathf.Lerp(startMinOnScreen, fullMinOnScreen, ramp));
+      int most = Mathf.RoundToInt(Mathf.Lerp(startMaxOnScreen, fullMaxOnScreen, ramp));
 
-            Camera mainCamera = Camera.main;
-            float spawnX = mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect + 1f;
-            // Eating a third-party cookie makes the next cookies spawn right at the player's height.
-            float spawnY = player != null && player.IsTracked
-                ? Mathf.Clamp(player.transform.position.y, minY, maxY)
-                : Random.Range(minY, maxY);
-            Vector3 spawnPos = new Vector3(spawnX, spawnY);
-            Instantiate(Cookie, spawnPos, Quaternion.identity).GetComponent<Cookie>()
-                .Setup(RandomCookieType(), player != null ? player.transform : null);
+      // A group arrives on the usual timer, or right away when too few cookies are left,
+      // topping the screen up to a random amount in range without going over the cap.
+      if (spawnTimer > timeNextSpawn || Cookie.ActiveCount < fewest)
+        {
+            SpawnGroup(Random.Range(fewest, most + 1) - Cookie.ActiveCount);
 
             spawnTimer = 0f;
 
@@ -57,6 +68,38 @@ public class CookieSpawner : MonoBehaviour
 
         }
 
+    }
+
+    // Spreads the group over the spawn height in lanes, staggered sideways into a loose cluster.
+    private void SpawnGroup(int count)
+    {
+        if (count <= 0) return;
+        if (player == null) player = FindAnyObjectByType<PlayerController>();
+
+        Camera mainCamera = Camera.main;
+        float spawnX = mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect + 1f;
+        float laneHeight = (maxY - minY) / count;
+        for (int i = 0; i < count; i++)
+        {
+            float spawnY = minY + laneHeight * (i + Random.value);
+            // Eating a third-party cookie makes one cookie in each group come right at the player's height.
+            bool aimedAtPlayer = i == 0 && player != null && player.IsTracked;
+            if (aimedAtPlayer) spawnY = Mathf.Clamp(player.transform.position.y, minY, maxY);
+
+            CookieType type = RandomCookieType();
+            Vector2 direction = Vector2.left;
+            // Some cookies cut across at an angle, heading away from the edge they spawned nearer to.
+            if (!aimedAtPlayer && type != CookieType.ThirdParty && Random.value < angledChance)
+            {
+                float angle = Random.Range(minAngle, maxAngle) * Mathf.Deg2Rad;
+                float upOrDown = spawnY < (minY + maxY) / 2f ? 1f : -1f;
+                direction = new Vector2(-Mathf.Cos(angle), upOrDown * Mathf.Sin(angle));
+            }
+
+            Vector3 spawnPos = new Vector3(spawnX + Random.Range(0f, groupSpread), spawnY);
+            Instantiate(cookiePrefab, spawnPos, Quaternion.identity).GetComponent<Cookie>()
+                .Setup(type, player != null ? player.transform : null, direction);
+        }
     }
 
     private CookieType RandomCookieType()

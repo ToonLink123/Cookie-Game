@@ -20,7 +20,7 @@ public class GameplayManager : MonoBehaviour
     public static int cookieCount;
     public static float metersTraveled = 0f;
     public static float difficultyUpdater = 0f;
-    public static int trackerCookiesHit;
+    public static int[] cookiesEaten;   // this run, indexed by CookieType
 
     private const string HighScoreKey = "CookieGame.HighScoreMeters";
     public static float HighScore { get; private set; }
@@ -31,6 +31,7 @@ public class GameplayManager : MonoBehaviour
 
     private static bool restarting;
     private bool gameOverHandled;
+    private GameObject homeButton;
 
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject player;
@@ -48,12 +49,13 @@ public class GameplayManager : MonoBehaviour
         metersTraveled = 0f;
         cookieCount = 0;
         difficultyUpdater = 0f;
-        trackerCookiesHit = 0;
+        cookiesEaten = new int[System.Enum.GetValues(typeof(CookieType)).Length];
         HighScore = PlayerPrefs.GetFloat(HighScoreKey, 0f);
         carriedSlow = PlayerPrefs.GetFloat(NextRunSlowKey, 0f);
         statsText.font = GameUI.LoadFont();
         statsText.gameObject.SetActive(false);
         restartButton.SetActive(false);
+        homeButton = CreateHomeButton();
         player.SetActive(false);
         cookieSpawner.enabled = false;
         gameUI.Initialize(HighScore, cookieSpawner.CookieSprite, mainMenu.GetComponent<RectTransform>());
@@ -98,6 +100,7 @@ public class GameplayManager : MonoBehaviour
             cookieSpawner.enabled = false;
             gameUI.ShowGameOver(HighScore, newHighScore);
             restartButton.SetActive(true);
+            homeButton.SetActive(true);
         }
 
         statsText.text = "Speed: " + (characterSpeed * 100f).ToString("0") + "%";
@@ -130,5 +133,27 @@ public class GameplayManager : MonoBehaviour
 
         restarting = true;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    // Reloading without the restarting flag lands on the home screen instead of a new run.
+    public void GoToHomeScreen()
+    {
+        if (currentState != GameState.GameOver) return;
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    // A copy of the restart button, just below it, that goes back to the home screen.
+    private GameObject CreateHomeButton()
+    {
+        GameObject home = Instantiate(restartButton, restartButton.transform.parent);
+        home.name = "HomeButton";
+        RectTransform rect = home.GetComponent<RectTransform>();
+        rect.anchoredPosition += Vector2.down * (rect.sizeDelta.y + 18f);
+        home.GetComponent<Image>().sprite = Resources.Load<Sprite>("HomeButton");
+        Button button = home.GetComponent<Button>();
+        button.onClick = new Button.ButtonClickedEvent();   // drop the copied RestartGame call
+        button.onClick.AddListener(GoToHomeScreen);
+        return home;
     }
 }

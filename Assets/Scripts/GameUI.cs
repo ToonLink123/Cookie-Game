@@ -16,12 +16,13 @@ public class GameUI : MonoBehaviour
     private static readonly Vector2 TitlePosition = new Vector2(0f, 242f);
     private const float TitleHover = 10f;
     private const float StartButtonPulse = 0.05f;
-    private static readonly (CookieType type, string description)[] LegendEntries =
+    // Every cookie type, in the order the legend and game over screen list them; details follow the name.
+    private static readonly (CookieType type, string details)[] LegendEntries =
     {
-        (CookieType.FirstParty, "<b>First-Party</b>\nFlies straight.\nSlows you 7%."),
-        (CookieType.Session, "<b>Session</b>\nFast and flickery.\nSlows you 20%, briefly."),
-        (CookieType.ThirdParty, "<b>Third-Party</b>  (100 m+)\nTracks you! Slows you 7%.\nEat too many and\nobstacles turn into ads."),
-        (CookieType.Persistent, "<b>Persistent</b>  (220 m+)\nComes back twice.\nSlows you 10%, and your\nnext game too."),
+        (CookieType.FirstParty, "\nFlies straight.\nSlows you 7%."),
+        (CookieType.Session, "\nFast and flickery.\nSlows you 20%, briefly."),
+        (CookieType.ThirdParty, "  (100 m+)\nTracks you! Slows you 7%.\nEat too many and\nobstacles turn into ads."),
+        (CookieType.Persistent, "  (220 m+)\nComes back twice.\nSlows you 10%, and your\nnext game too."),
     };
 
     private Font font;
@@ -39,10 +40,14 @@ public class GameUI : MonoBehaviour
     private Text persistentSlowText;
     private RectTransform title;
     private RectTransform startButton;
+    private Sprite cookieSprite;
+    private GameObject eatenPanel;
+    private Text[] eatenCounts;
 
     public void Initialize(float highScore, Sprite cookieSprite, RectTransform startButton)
     {
         this.startButton = startButton;
+        this.cookieSprite = cookieSprite;
         font = LoadFont();
         trackers = CreateRect("Trackers", transform, Vector2.zero, Vector2.zero).gameObject;
         Stretch(trackers.GetComponent<RectTransform>(), Vector2.zero, Vector2.one);
@@ -103,8 +108,7 @@ public class GameUI : MonoBehaviour
         legendTitle.text = "<b>Cookie Legend</b>";
         for (int i = 0; i < LegendEntries.Length; i++)
         {
-            CreateLegendEntry(LegendEntries[i].type, LegendEntries[i].description, cookieSprite,
-                -125f - i * 152f);
+            CreateLegendEntry(LegendEntries[i].type, LegendEntries[i].details, -125f - i * 152f);
         }
         legend.SetActive(false);
 
@@ -117,6 +121,32 @@ public class GameUI : MonoBehaviour
         factText = CreateText("FactText", facts.transform, new Vector2(0.5f, 0.5f), Vector2.zero,
             new Vector2(820f, 290f), 34);
         facts.SetActive(false);
+
+        // Game over: how many of each cookie type the player ate, between the high score and the fact.
+        RectTransform eatenRect = CreateRect("CookiesEaten", transform, new Vector2(0.5f, 1f),
+            new Vector2(1200f, 130f));
+        eatenRect.pivot = new Vector2(0.5f, 1f);
+        eatenRect.anchoredPosition = new Vector2(0f, -110f);
+        eatenPanel = eatenRect.gameObject;
+        Text eatenTitle = CreateText("Title", eatenRect, new Vector2(0.5f, 1f), new Vector2(0f, -20f),
+            new Vector2(600f, 40f), 30);
+        eatenTitle.text = "<b>Cookies eaten</b>";
+        eatenCounts = new Text[LegendEntries.Length];
+        for (int i = 0; i < LegendEntries.Length; i++)
+        {
+            CookieType type = LegendEntries[i].type;
+            RectTransform entry = CreateRect(type + "Eaten", eatenRect, new Vector2(0.5f, 0f),
+                new Vector2(290f, 70f));
+            entry.pivot = new Vector2(0.5f, 0f);
+            entry.anchoredPosition = new Vector2((i - 1.5f) * 300f, 0f);
+            CreateCookieIcon(type, entry, new Vector2(0f, 0.5f), new Vector2(35f, 0f), 56f);
+            Text count = CreateText("Count", entry, new Vector2(1f, 0.5f), Vector2.zero,
+                new Vector2(220f, 60f), 28);
+            count.rectTransform.pivot = new Vector2(1f, 0.5f);
+            count.alignment = TextAnchor.MiddleLeft;
+            eatenCounts[(int)type] = count;
+        }
+        eatenPanel.SetActive(false);
         UpdateTrackers(0, 0f);
     }
 
@@ -163,6 +193,11 @@ public class GameUI : MonoBehaviour
         factText.text = CookieFacts.RandomFact();
         facts.SetActive(true);
         persistentSlowText.gameObject.SetActive(false);
+        for (int i = 0; i < eatenCounts.Length; i++)
+        {
+            eatenCounts[i].text = Cookie.Name((CookieType)i) + ": " + GameplayManager.cookiesEaten[i];
+        }
+        eatenPanel.SetActive(true);
     }
 
     private void SetHighScore(float highScore, bool newHighScore)
@@ -214,35 +249,41 @@ public class GameUI : MonoBehaviour
             new Vector2(-85f, 0f), new Vector2(160f, 75f), 42);
     }
 
-    private void CreateLegendEntry(CookieType type, string description, Sprite cookieSprite, float y)
+    private void CreateLegendEntry(CookieType type, string details, float y)
     {
         RectTransform entry = CreateRect(type + "Entry", legend.transform, new Vector2(0.5f, 1f),
             new Vector2(440f, 140f));
         entry.pivot = new Vector2(0.5f, 1f);
         entry.anchoredPosition = new Vector2(0f, y);
 
-        float iconSize = type == CookieType.Persistent ? 96f : 80f;
-        Image icon = CreateImage("Icon", entry, cookieSprite, new Vector2(0f, 0.5f), new Vector2(50f, 0f),
-            new Vector2(iconSize, iconSize));
+        CreateCookieIcon(type, entry, new Vector2(0f, 0.5f), new Vector2(50f, 0f), 80f);
+        Text text = CreateText("Description", entry, new Vector2(1f, 0.5f), Vector2.zero,
+            new Vector2(330f, 140f), 26);
+        text.rectTransform.pivot = new Vector2(1f, 0.5f);
+        text.alignment = TextAnchor.MiddleLeft;
+        text.text = "<b>" + Cookie.Name(type) + "</b>" + details;
+    }
+
+    // A cookie tinted like its type in game, with the tracker's eye on third-party cookies.
+    private Image CreateCookieIcon(CookieType type, Transform parent, Vector2 anchor, Vector2 position, float size)
+    {
+        // Persistent cookies are bigger in game, so their icon is too.
+        if (type == CookieType.Persistent) size *= 1.2f;
+        Image icon = CreateImage("Icon", parent, cookieSprite, anchor, position, new Vector2(size, size));
         Color tint = Cookie.Tint(type);
         if (type == CookieType.Session) tint.a = 0.8f;
         icon.color = tint;
         if (type == CookieType.ThirdParty)
         {
             // A still copy of the tracker's eye, looking left like it does in game.
-            float eyeWidth = iconSize * CookieEye.SizeOnCookie;
+            float eyeWidth = size * CookieEye.SizeOnCookie;
             CreateImage("Eye", icon.transform, CookieEye.EyeSprite, new Vector2(0.5f, 0.5f), Vector2.zero,
                 new Vector2(eyeWidth, eyeWidth)).preserveAspect = true;
             float pupilSize = eyeWidth * CookieEye.PupilSprite.rect.width / CookieEye.EyeSprite.rect.width;
             CreateImage("Pupil", icon.transform, CookieEye.PupilSprite, new Vector2(0.5f, 0.5f),
                 new Vector2(-CookieEye.PupilRangeX * eyeWidth, 0f), new Vector2(pupilSize, pupilSize));
         }
-
-        Text text = CreateText("Description", entry, new Vector2(1f, 0.5f), Vector2.zero,
-            new Vector2(330f, 140f), 26);
-        text.rectTransform.pivot = new Vector2(1f, 0.5f);
-        text.alignment = TextAnchor.MiddleLeft;
-        text.text = description;
+        return icon;
     }
 
     private Image CreateImage(string name, Transform parent, Sprite sprite, Vector2 anchor,

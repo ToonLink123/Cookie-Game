@@ -62,6 +62,12 @@ public class CookieEye : MonoBehaviour
         transform.localScale = new Vector3(size, size * openness, 1f);
     }
 
+    // The cookie underneath rolls; after it has turned this frame, set the eye back upright.
+    void LateUpdate()
+    {
+        transform.rotation = Quaternion.identity;
+    }
+
     private static Sprite DrawEye()
     {
         Texture2D texture = NewTexture(EyeWidth, EyeHeight);

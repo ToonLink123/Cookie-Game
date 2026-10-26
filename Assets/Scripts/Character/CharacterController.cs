@@ -20,6 +20,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float trackedTime = 6f;
     [SerializeField] float minMultiplier = 0.2f;
 
+    [Header("Staying still")]
+    [SerializeField] float stillRange = 0.75f;
+    [SerializeField] float stillTimeLimit = 5f;
+
     [Header("Sprites")]
     [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] Sprite happySprite;
@@ -33,9 +37,15 @@ public class PlayerController : MonoBehaviour
     float temporarySlow;
     float trackedTimer;
     int persistentEaten;
+    float stillY;
+    float stillTime;
 
     // While tracked (after eating a third-party cookie), new cookies spawn at the player's height.
     public bool IsTracked => trackedTimer > 0f;
+
+    // True once the player has stayed within stillRange of one height for stillTimeLimit seconds,
+    // e.g. by resting on the floor or ceiling. Hazards get sent at them until they move.
+    public bool IsCamping => stillTime >= stillTimeLimit;
 
     void Awake()
     {
@@ -62,6 +72,16 @@ public class PlayerController : MonoBehaviour
         {
             temporarySlow = Mathf.MoveTowards(temporarySlow, 0f, sessionSlow / sessionRecoverTime * Time.deltaTime);
             UpdateSpeed();
+        }
+
+        if (Mathf.Abs(rb.position.y - stillY) > stillRange)
+        {
+            stillY = rb.position.y;
+            stillTime = 0f;
+        }
+        else
+        {
+            stillTime += Time.deltaTime;
         }
 
         var kb = Keyboard.current;
@@ -121,6 +141,7 @@ public class PlayerController : MonoBehaviour
         if (GameplayManager.currentState != GameState.Gameplay) return;
 
         GameplayManager.cookieCount++;
+        GameplayManager.cookiesEaten[(int)type]++;
         switch (type)
         {
             case CookieType.Session:
@@ -134,7 +155,6 @@ public class PlayerController : MonoBehaviour
             case CookieType.ThirdParty:
                 permanentSlow += slowPerCookie;
                 trackedTimer = trackedTime;
-                GameplayManager.trackerCookiesHit++;
                 break;
             default:
                 permanentSlow += slowPerCookie;

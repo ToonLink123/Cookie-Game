@@ -9,6 +9,7 @@ public class ObstacleSpawner : MonoBehaviour
     [SerializeField] public float minSpawnDelay = 8f;
     [SerializeField] public float maxSpawnDelay = 14f;
     [SerializeField] private int trackerHitsForAllAds = 10;
+    [SerializeField] private float campingHazardInterval = 1.5f;
 
     // The comet art is drawn heading down-left at this many degrees below horizontal.
     private const float CometArtAngle = 46f;
@@ -18,6 +19,7 @@ public class ObstacleSpawner : MonoBehaviour
     private Camera mainCamera;
     private PlayerController player;
     private float spawnTimer;
+    private float campingTimer;
 
     void Start()
     {
@@ -34,22 +36,39 @@ public class ObstacleSpawner : MonoBehaviour
     void Update()
     {
         if (GameplayManager.currentState != GameState.Gameplay) return;
+        if (player == null) player = FindAnyObjectByType<PlayerController>();
+
+        // Staying in one spot too long brings hazards straight at that height until the player moves.
+        if (player != null && player.IsCamping)
+        {
+            campingTimer -= Time.deltaTime;
+            if (campingTimer <= 0f)
+            {
+                SpawnObstacle(player.transform.position.y);
+                campingTimer = campingHazardInterval;
+            }
+        }
+        else
+        {
+            campingTimer = 0f;
+        }
 
         spawnTimer -= Time.deltaTime * GameplayManager.overallSpeed;
         if (spawnTimer > 0f) return;
 
-        SpawnObstacle();
+        SpawnObstacle(null);
         spawnTimer = Random.Range(minSpawnDelay, maxSpawnDelay);
     }
 
-    private void SpawnObstacle()
+    // targetY sends an airborne hazard (bird or comet) at that height; otherwise any obstacle at random.
+    private void SpawnObstacle(float? targetY)
     {
-        int kind = Random.Range(0, 3);
+        int kind = Random.Range(0, targetY.HasValue ? 2 : 3);
         bool bird = kind == 0;
         bool comet = kind == 1;
         bool airborne = bird || comet;
         // Each tracker cookie eaten makes it likelier this obstacle shows up as an ad of the same size.
-        bool ad = Random.Range(0, trackerHitsForAllAds) < GameplayManager.trackerCookiesHit;
+        bool ad = Random.Range(0, trackerHitsForAllAds) < GameplayManager.cookiesEaten[(int)CookieType.ThirdParty];
         Sprite sprite = bird ? birdFrames[0]
             : comet ? cometSprite : beanstalkSprites[Random.Range(0, beanstalkSprites.Length)];
         GameObject obstacle = new GameObject(ad ? "Ad" : bird ? "Bird" : comet ? "Comet" : "Beanstalk");
@@ -70,15 +89,16 @@ public class ObstacleSpawner : MonoBehaviour
         Vector2 direction = Vector2.left;
         if (comet)
         {
-            direction = AimComet(obstacle.transform, spriteRenderer.bounds.extents.magnitude, !ad);
+            direction = AimComet(obstacle.transform, spriteRenderer.bounds.extents.magnitude, !ad, targetY);
         }
         else
         {
             float halfHeight = spriteRenderer.bounds.extents.y;
-            float y = airborne
-                ? Random.Range(mainCamera.transform.position.y - mainCamera.orthographicSize + halfHeight + 0.5f,
-                    mainCamera.transform.position.y + mainCamera.orthographicSize - halfHeight - 0.5f)
-                : mainCamera.transform.position.y - mainCamera.orthographicSize + halfHeight;
+            float lowest = mainCamera.transform.position.y - mainCamera.orthographicSize + halfHeight;
+            float highest = mainCamera.transform.position.y + mainCamera.orthographicSize - halfHeight - 0.5f;
+            float y = !airborne ? lowest
+                : targetY.HasValue ? Mathf.Clamp(targetY.Value, lowest + 0.5f, highest)
+                : Random.Range(lowest + 0.5f, highest);
             float x = mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect
                 + spriteRenderer.bounds.extents.x + 0.1f;
             obstacle.transform.position = new Vector3(x, y, 0f);
@@ -110,11 +130,10 @@ public class ObstacleSpawner : MonoBehaviour
     }
 
     // Places a comet just above the top right of the screen and returns its fall direction: a
-    // diagonal that crosses the player's column somewhere the player can be, so it can still be dodged.
-    private Vector2 AimComet(Transform comet, float radius, bool alignArt)
+    // diagonal that crosses the player's column somewhere the player can be (or at targetY), so it
+    // can still be dodged.
+    private Vector2 AimComet(Transform comet, float radius, bool alignArt, float? targetY)
     {
-        if (player == null) player = FindAnyObjectByType<PlayerController>();
-
         Vector3 cameraPosition = mainCamera.transform.position;
         float halfWidth = mainCamera.orthographicSize * mainCamera.aspect;
         float playerX = player != null ? player.transform.position.x : cameraPosition.x - halfWidth + 2f;
@@ -125,7 +144,9 @@ public class ObstacleSpawner : MonoBehaviour
         float run = x - playerX;
         float minAngle = Mathf.Max(MinCometAngle, Mathf.Atan2(y - (cameraPosition.y + reach), run) * Mathf.Rad2Deg);
         float maxAngle = Mathf.Min(MaxCometAngle, Mathf.Atan2(y - (cameraPosition.y - reach), run) * Mathf.Rad2Deg);
-        float angle = Random.Range(minAngle, maxAngle);
+        float angle = targetY.HasValue
+            ? Mathf.Atan2(y - targetY.Value, run) * Mathf.Rad2Deg
+            : Random.Range(minAngle, maxAngle);
 
         comet.position = new Vector3(x, y, 0f);
         // Turn the art so its tail trails straight behind the way it is falling.
