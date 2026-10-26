@@ -21,6 +21,7 @@ public class GameUI : MonoBehaviour
     private Text metersText;
     private Text highScoreText;
     private Text factText;
+    private Text persistentSlowText;
 
     public void Initialize(float highScore)
     {
@@ -32,6 +33,12 @@ public class GameUI : MonoBehaviour
         metersText = CreateTracker("Meters", metersTrackerSprite, Vector2.one,
             new Vector2(-32f, -32f));
         trackers.SetActive(false);
+
+        persistentSlowText = CreateText("PersistentSlow", transform, Vector2.zero, new Vector2(32f, 32f),
+            new Vector2(760f, 50f), 30);
+        persistentSlowText.rectTransform.pivot = Vector2.zero;
+        persistentSlowText.alignment = TextAnchor.LowerLeft;
+        persistentSlowText.gameObject.SetActive(false);
 
         highScoreText = CreateText("HighScore", transform, new Vector2(0.5f, 1f),
             new Vector2(0f, -34f), new Vector2(550f, 60f), 34);
@@ -85,13 +92,16 @@ public class GameUI : MonoBehaviour
         UpdateTrackers(0, 0f);
     }
 
-    public void ShowGameplay()
+    public void ShowGameplay(float carriedSlow)
     {
         controls.SetActive(false);
         credits.SetActive(false);
         creditsButton.SetActive(false);
         facts.SetActive(false);
         trackers.SetActive(true);
+        persistentSlowText.text = "Persistent cookies from last game: "
+            + Mathf.RoundToInt(carriedSlow * 100f) + "% slower";
+        persistentSlowText.gameObject.SetActive(true);
     }
 
     public void UpdateTrackers(int cookies, float meters)
@@ -105,6 +115,7 @@ public class GameUI : MonoBehaviour
         SetHighScore(highScore, newHighScore);
         factText.text = CookieFacts.RandomFact();
         facts.SetActive(true);
+        persistentSlowText.gameObject.SetActive(false);
     }
 
     private void SetHighScore(float highScore, bool newHighScore)

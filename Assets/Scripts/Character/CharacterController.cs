@@ -13,6 +13,11 @@ public class PlayerController : MonoBehaviour
 
     [Header("Cookie slowdown")]
     [SerializeField] float slowPerCookie = 0.07f;
+    [SerializeField] float persistentSlow = 0.1f;
+    [SerializeField] float persistentNextRunSlow = 0.05f;
+    [SerializeField] float sessionSlow = 0.2f;
+    [SerializeField] float sessionRecoverTime = 5f;
+    [SerializeField] float trackedTime = 6f;
     [SerializeField] float minMultiplier = 0.2f;
 
     [Header("Sprites")]
@@ -24,6 +29,13 @@ public class PlayerController : MonoBehaviour
     bool holding;
     float vy;
     bool takingOff = true;
+    float permanentSlow;
+    float temporarySlow;
+    float trackedTimer;
+    int persistentEaten;
+
+    // While tracked (after eating a third-party cookie), new cookies spawn at the player's height.
+    public bool IsTracked => trackedTimer > 0f;
 
     void Awake()
     {
@@ -35,9 +47,22 @@ public class PlayerController : MonoBehaviour
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    void Start()
+    {
+        permanentSlow = GameplayManager.carriedSlow;
+        UpdateSpeed();
+    }
+
     void Update()
     {
         if (GameplayManager.currentState != GameState.Gameplay) return;
+
+        trackedTimer -= Time.deltaTime;
+        if (temporarySlow > 0f)
+        {
+            temporarySlow = Mathf.MoveTowards(temporarySlow, 0f, sessionSlow / sessionRecoverTime * Time.deltaTime);
+            UpdateSpeed();
+        }
 
         var kb = Keyboard.current;
         var mouse = Mouse.current;
@@ -91,11 +116,35 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
     }
 
-    public void EatCookie()
+    public void EatCookie(CookieType type)
     {
         if (GameplayManager.currentState != GameState.Gameplay) return;
 
         GameplayManager.cookieCount++;
-        GameplayManager.characterSpeed = Mathf.Max(minMultiplier, GameplayManager.characterSpeed - slowPerCookie);
+        switch (type)
+        {
+            case CookieType.Session:
+                temporarySlow += sessionSlow;
+                break;
+            case CookieType.Persistent:
+                permanentSlow += persistentSlow;
+                persistentEaten++;
+                GameplayManager.SaveNextRunSlow(persistentEaten * persistentNextRunSlow);
+                break;
+            case CookieType.ThirdParty:
+                permanentSlow += slowPerCookie;
+                trackedTimer = trackedTime;
+                GameplayManager.trackerCookiesHit++;
+                break;
+            default:
+                permanentSlow += slowPerCookie;
+                break;
+        }
+        UpdateSpeed();
+    }
+
+    void UpdateSpeed()
+    {
+        GameplayManager.characterSpeed = Mathf.Max(minMultiplier, 1f - permanentSlow - temporarySlow);
     }
 }

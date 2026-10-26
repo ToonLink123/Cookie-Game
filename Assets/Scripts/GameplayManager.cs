@@ -20,9 +20,14 @@ public class GameplayManager : MonoBehaviour
     public static int cookieCount;
     public static float metersTraveled = 0f;
     public static float difficultyUpdater = 0f;
+    public static int trackerCookiesHit;
 
     private const string HighScoreKey = "CookieGame.HighScoreMeters";
     public static float HighScore { get; private set; }
+
+    // Slowdown this run starts with, saved on the device by persistent cookies eaten last game.
+    private const string NextRunSlowKey = "CookieGame.PersistentCookieSlow";
+    public static float carriedSlow;
 
     private static bool restarting;
     private bool gameOverHandled;
@@ -43,7 +48,9 @@ public class GameplayManager : MonoBehaviour
         metersTraveled = 0f;
         cookieCount = 0;
         difficultyUpdater = 0f;
+        trackerCookiesHit = 0;
         HighScore = PlayerPrefs.GetFloat(HighScoreKey, 0f);
+        carriedSlow = PlayerPrefs.GetFloat(NextRunSlowKey, 0f);
         statsText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         statsText.gameObject.SetActive(false);
         restartButton.SetActive(false);
@@ -102,11 +109,19 @@ public class GameplayManager : MonoBehaviour
         if (currentState != GameState.MainMenu) return;
 
         currentState = GameState.Gameplay;
+        // Last game's persistent cookies expire once this run has picked them up.
+        SaveNextRunSlow(0f);
         mainMenu.SetActive(false);
-        gameUI.ShowGameplay();
+        gameUI.ShowGameplay(carriedSlow);
         statsText.gameObject.SetActive(true);
         player.SetActive(true);
         cookieSpawner.enabled = true;
+    }
+
+    public static void SaveNextRunSlow(float slow)
+    {
+        PlayerPrefs.SetFloat(NextRunSlowKey, slow);
+        PlayerPrefs.Save();
     }
 
     public void RestartGame()
