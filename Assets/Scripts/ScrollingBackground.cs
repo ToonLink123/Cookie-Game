@@ -8,9 +8,16 @@ public class ScrollingBackground : MonoBehaviour
     [SerializeField] private float takeoffSpeed = 1.5f;
     [SerializeField] private Sprite[] cloudSprites = new Sprite[0];
     [SerializeField] private int cloudCount = 6;
+    [SerializeField] private int trackerHitsForAllAdClouds = 10;
+    [SerializeField] private float minMenuDrift = 0.3f;   // home screen cloud speeds, units per second
+    [SerializeField] private float maxMenuDrift = 1f;
+
+    // Ads in the sky are a bit see-through, so they read as far away rather than as obstacles.
+    private static readonly Color AdCloudTint = new Color(1f, 1f, 1f, 0.7f);
 
     private SpriteRenderer[] tiles;
     private SpriteRenderer[] clouds;
+    private float[] menuDrift;   // per cloud; negative drifts left
     private float tileWidth;
     private float verticalOffset;
     private Camera mainCamera;
@@ -47,6 +54,7 @@ public class ScrollingBackground : MonoBehaviour
         }
 
         clouds = new SpriteRenderer[cloudSprites.Length > 0 ? cloudCount : 0];
+        menuDrift = new float[clouds.Length];
         for (int i = 0; i < clouds.Length; i++)
         {
             GameObject cloud = new GameObject("Cloud");
@@ -54,11 +62,17 @@ public class ScrollingBackground : MonoBehaviour
             clouds[i] = cloud.AddComponent<SpriteRenderer>();
             clouds[i].sortingOrder = -50;
             RandomizeCloud(clouds[i], false);
+            menuDrift[i] = Random.Range(minMenuDrift, maxMenuDrift) * (Random.value < 0.5f ? -1f : 1f);
         }
     }
 
     private void Update()
     {
+        if (GameplayManager.currentState == GameState.MainMenu)
+        {
+            DriftClouds();
+            return;
+        }
         if (GameplayManager.currentState != GameState.Gameplay) return;
 
         float deltaTime = Time.deltaTime * GameplayManager.overallSpeed;
@@ -87,10 +101,41 @@ public class ScrollingBackground : MonoBehaviour
         }
     }
 
+    // Home screen: each cloud glides its own way at its own pace, wrapping around to the other side.
+    private void DriftClouds()
+    {
+        float halfWidth = mainCamera.orthographicSize * mainCamera.aspect;
+        float left = mainCamera.transform.position.x - halfWidth;
+        float right = mainCamera.transform.position.x + halfWidth;
+        for (int i = 0; i < clouds.Length; i++)
+        {
+            Transform cloud = clouds[i].transform;
+            cloud.position += Vector3.right * menuDrift[i] * Time.deltaTime;
+            Bounds bounds = clouds[i].bounds;
+            float wrap = right - left + bounds.size.x;
+            if (menuDrift[i] > 0f && bounds.min.x > right) cloud.position += Vector3.left * wrap;
+            else if (menuDrift[i] < 0f && bounds.max.x < left) cloud.position += Vector3.right * wrap;
+        }
+    }
+
     private void RandomizeCloud(SpriteRenderer cloud, bool offscreen)
     {
+        // If this cloud was an ad last time around, free that ad's drawing.
+        AdBox oldAd = cloud.GetComponent<AdBox>();
+        if (oldAd != null) Destroy(oldAd);
+
         cloud.sprite = cloudSprites[Random.Range(0, cloudSprites.Length)];
         cloud.transform.localScale = Vector3.one * Random.Range(1.5f, 3f);
+        cloud.color = Color.white;
+        // Each tracker cookie eaten makes it 10% likelier this cloud comes back as an ad of the same size.
+        if (Random.Range(0, trackerHitsForAllAdClouds) < GameplayManager.trackerCookiesHit)
+        {
+            Vector2 size = cloud.bounds.size;
+            cloud.transform.localScale = Vector3.one;
+            cloud.sprite = AdBox.Create(cloud.gameObject, size);
+            cloud.color = AdCloudTint;
+        }
+
         float halfWidth = mainCamera.orthographicSize * mainCamera.aspect;
         float x = mainCamera.transform.position.x + (offscreen
             ? halfWidth + cloud.bounds.extents.x

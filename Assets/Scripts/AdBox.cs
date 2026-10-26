@@ -1,6 +1,7 @@
 using UnityEngine;
 
-// An obstacle drawn as a pop-up ad. Owns its generated texture so it is freed with the obstacle.
+// A pop-up ad drawn onto an obstacle or a background cloud. Owns its generated texture, so the
+// drawing is freed when the object (or this component) is destroyed.
 public class AdBox : MonoBehaviour
 {
     // 54 texels per unit keeps the pixel art crisp at 1080p (2 screen pixels per texel).
@@ -9,7 +10,7 @@ public class AdBox : MonoBehaviour
     private Texture2D texture;
     private Sprite sprite;
 
-    // Draws a random ad of the given world size onto the obstacle and returns its sprite.
+    // Draws a random ad of the given world size onto the object and returns its sprite.
     public static Sprite Create(GameObject obstacle, Vector2 size)
     {
         int width = Mathf.RoundToInt(size.x * PixelsPerUnit);

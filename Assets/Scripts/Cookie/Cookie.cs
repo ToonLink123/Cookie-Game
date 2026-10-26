@@ -14,17 +14,18 @@ public class Cookie : MonoBehaviour
 
     private const float SessionSpeed = 1.5f;
     private const float PersistentSpeed = 0.6f;
-    private const float PersistentScale = 2.8f;
+    public const float PersistentScale = 2.8f;
     // Each cookie's size is randomly between 10% smaller and 70% bigger than the prefab.
     public const float MinSizeScale = 0.9f;
-    private const float MaxSizeScale = 1.7f;
+    public const float MaxSizeScale = 1.7f;
     private const float RollSpeed = 0.5f;   // spin rate compared to true rolling
     private const int PersistentReturns = 2;
     private const float TrackerMaxSpeed = 2f;
-    private const float TrackerTurnRate = 120f;
+    private const float TrackerTurnRate = 144f;   // degrees per second it can turn while homing in
     private const float TrackerMaxAngle = 60f;
-    private const float TrackerLockTime = 0.7f;
-    private const float TrackerLockDistance = 2f;
+    // Trackers stop steering this many seconds (or units) before reaching the player, leaving time to dodge.
+    private const float TrackerLockTime = 0.56f;
+    private const float TrackerLockDistance = 1.6f;
 
     private CookieType type;
     private Transform target;
@@ -90,8 +91,7 @@ public class Cookie : MonoBehaviour
         color = Tint(type);
         float size = Random.Range(MinSizeScale, MaxSizeScale);
         transform.localScale *= size;
-        // Smaller cookies fly faster and bigger ones slower; an average-sized cookie keeps its type's speed.
-        baseSpeed = speed * (MinSizeScale + MaxSizeScale) / 2f / size;
+        baseSpeed = speed * SpeedScale(type, size);
         currentSpeed = baseSpeed;
         switch (type)
         {
@@ -101,11 +101,7 @@ public class Cookie : MonoBehaviour
                 if (tracking) trackingStartDistance = Vector2.Distance(transform.position, player.position);
                 CookieEye.Attach(spriteRenderer, player);
                 break;
-            case CookieType.Session:
-                currentSpeed = baseSpeed * SessionSpeed;
-                break;
             case CookieType.Persistent:
-                currentSpeed = baseSpeed * PersistentSpeed;
                 transform.localScale *= PersistentScale;
                 returnsLeft = PersistentReturns;
                 break;
@@ -114,6 +110,16 @@ public class Cookie : MonoBehaviour
         // Big cookies would pop in at the edge, so make sure the whole cookie starts offscreen.
         transform.position = new Vector3(Mathf.Max(transform.position.x, OffscreenRightX()),
             transform.position.y, transform.position.z);
+    }
+
+    // Speed compared to an average-sized first-party cookie: smaller cookies are faster and bigger ones
+    // slower, then session cookies are quicker and persistent ones slower.
+    public static float SpeedScale(CookieType type, float size)
+    {
+        float scale = (MinSizeScale + MaxSizeScale) / 2f / size;
+        if (type == CookieType.Session) scale *= SessionSpeed;
+        else if (type == CookieType.Persistent) scale *= PersistentSpeed;
+        return scale;
     }
 
     private float OffscreenRightX()
@@ -202,7 +208,9 @@ public class Cookie : MonoBehaviour
         if (player == null) return;
         collected = true;
         player.EatCookie(type);
-        CookieBurst.Spawn(GetComponent<SpriteRenderer>());
-        Destroy(gameObject);
+        // Stop moving and counting as on screen; CookieSuck slurps it into the player, then removes it.
+        enabled = false;
+        GetComponent<Collider2D>().enabled = false;
+        CookieSuck.Begin(gameObject, player.transform);
     }
 }

@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     bool holding;
     float vy;
     bool takingOff = true;
+    float speedBonus;
     float permanentSlow;
     float temporarySlow;
     float trackedTimer;
@@ -59,6 +60,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        speedBonus = GameplayManager.startSpeedBonus;
         permanentSlow = GameplayManager.carriedSlow;
         UpdateSpeed();
     }
@@ -181,6 +183,6 @@ public class PlayerController : MonoBehaviour
 
     void UpdateSpeed()
     {
-        GameplayManager.characterSpeed = Mathf.Max(minMultiplier, 1f - permanentSlow - temporarySlow);
+        GameplayManager.characterSpeed = Mathf.Max(minMultiplier, 1f + speedBonus - permanentSlow - temporarySlow);
     }
 }

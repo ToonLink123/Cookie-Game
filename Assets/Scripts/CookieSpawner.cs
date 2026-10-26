@@ -45,6 +45,7 @@ public class CookieSpawner : MonoBehaviour
     private float clearDataGap;
     private float nextClearData;
 
+    public GameObject CookiePrefab => cookiePrefab;
     public Sprite CookieSprite => cookiePrefab.GetComponent<SpriteRenderer>().sprite;
 
     void Start()

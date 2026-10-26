@@ -88,6 +88,7 @@ public class GameUI : MonoBehaviour
             new Vector2(1f, 0.5f), new Vector2(-40f, -20f), new Vector2(520f, 760f));
         creditsImage.rectTransform.pivot = new Vector2(1f, 0.5f);
         credits = creditsImage.gameObject;
+        creditsImage.raycastTarget = true;   // so clicks on the panel don't pop the menu cookies behind it
         Text creditsText = CreateText("CreditsText", credits.transform, new Vector2(0.5f, 0.5f),
             Vector2.zero, new Vector2(440f, 670f), 26);
         creditsText.text = "<b>Cookies:</b>\n\n"
@@ -104,6 +105,7 @@ public class GameUI : MonoBehaviour
             new Vector2(0f, 0.5f), new Vector2(40f, -20f), new Vector2(520f, 760f));
         legendImage.rectTransform.pivot = new Vector2(0f, 0.5f);
         legend = legendImage.gameObject;
+        legendImage.raycastTarget = true;   // so clicks on the panel don't pop the menu cookies behind it
         Text legendTitle = CreateText("Title", legend.transform, new Vector2(0.5f, 1f),
             new Vector2(0f, -75f), new Vector2(440f, 60f), 40);
         legendTitle.text = "<b>Cookie Legend</b>";
@@ -247,23 +249,25 @@ public class GameUI : MonoBehaviour
         legend.SetActive(!legend.activeSelf);
     }
 
-    // A grey home-screen button in a bottom corner, with its arrow pointing toward that side.
+    // A home-screen button in a bottom corner, with its arrow pointing toward that side. The box is the
+    // text_box_2 art (identical to Facts.png) at exactly 2x, so its pixels stay crisp.
     private GameObject CreateMenuButton(string label, Vector2 corner, UnityEngine.Events.UnityAction onClick)
     {
         float side = corner.x > 0.5f ? 1f : -1f;
-        RectTransform buttonRect = CreateRect(label + "Button", transform, corner, new Vector2(270f, 70f));
+        RectTransform buttonRect = CreateRect(label + "Button", transform, corner, factsBoxSprite.rect.size * 2f);
         buttonRect.pivot = corner;
         buttonRect.anchoredPosition = new Vector2(-40f * side, 32f);
         Image buttonImage = buttonRect.gameObject.AddComponent<Image>();
-        buttonImage.color = new Color(0.76f, 0.77f, 0.79f);
+        buttonImage.sprite = factsBoxSprite;
         Button button = buttonRect.gameObject.AddComponent<Button>();
         button.targetGraphic = buttonImage;
         button.onClick.AddListener(onClick);
+        // Label and arrow centred together inside the box.
         Text buttonText = CreateText("Label", buttonRect, new Vector2(0.5f, 0.5f),
-            new Vector2(-25f * side, 0f), new Vector2(190f, 60f), 30);
+            new Vector2(-31f * side, 0f), new Vector2(130f, 60f), 30);
         buttonText.text = label;
         Image arrow = CreateImage("Arrow", buttonRect, creditsArrowSprite, new Vector2(0.5f, 0.5f),
-            new Vector2(90f * side, 0f), new Vector2(48f, 36f));
+            new Vector2(57f * side, 0f), new Vector2(48f, 36f));
         arrow.rectTransform.localScale = new Vector3(side, 1f, 1f);
         return buttonRect.gameObject;
     }

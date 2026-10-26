@@ -31,6 +31,17 @@ public class GameplayManager : MonoBehaviour
     private const string NextRunSlowKey = "CookieGame.PersistentCookieSlow";
     public static float carriedSlow;
 
+    // Easter egg: each cookie broken on the home screen adds 1% speed to the next game, up to 50%.
+    private const float BonusPerMenuCookie = 0.01f;
+    private const int MaxBonusMenuCookies = 50;
+    public static float startSpeedBonus;
+
+    // Speed readout colours at 20%, 100% and 150% speed.
+    private static readonly Color SlowestColor = new Color32(0xb4, 0x02, 0x19, 0xff);
+    private static readonly Color NormalSpeedColor = new Color32(0x08, 0xe8, 0x17, 0xff);
+    private static readonly Color FastestColor = new Color32(0x93, 0xee, 0x99, 0xff);
+    private MenuCookieRain menuCookieRain;
+
     private static bool restarting;
     private bool gameOverHandled;
     private GameObject homeButton;
@@ -55,7 +66,11 @@ public class GameplayManager : MonoBehaviour
         trackerCookiesHit = 0;
         HighScore = PlayerPrefs.GetFloat(HighScoreKey, 0f);
         carriedSlow = PlayerPrefs.GetFloat(NextRunSlowKey, 0f);
+        startSpeedBonus = 0f;
         statsText.font = GameUI.LoadFont();
+        Outline outline = statsText.gameObject.AddComponent<Outline>();
+        outline.effectColor = Color.black;
+        outline.effectDistance = new Vector2(1.5f, 1.5f);
         statsText.gameObject.SetActive(false);
         restartButton.SetActive(false);
         homeButton = CreateHomeButton();
@@ -63,6 +78,8 @@ public class GameplayManager : MonoBehaviour
         cookieSpawner.enabled = false;
         gameUI.Initialize(HighScore, cookieSpawner.CookieSprite, mainMenu.GetComponent<RectTransform>());
         gameUI.CreatePauseScreen(ResumeGame, GoToHomeScreen);
+        menuCookieRain = gameObject.AddComponent<MenuCookieRain>();
+        menuCookieRain.Initialize(cookieSpawner.CookiePrefab);
     }
 
     void Start()
@@ -115,7 +132,27 @@ public class GameplayManager : MonoBehaviour
         }
 
         statsText.text = "Speed: " + (characterSpeed * 100f).ToString("0") + "%";
+        statsText.color = SpeedColor(characterSpeed);
         gameUI.UpdateTrackers(cookieCount, metersTraveled);
+    }
+
+    // Dark red when crawling, through orange and yellow to green at normal speed, then paler green when boosted.
+    private static Color SpeedColor(float speed)
+    {
+        return speed < 1f
+            ? BlendHue(SlowestColor, NormalSpeedColor, Mathf.InverseLerp(0.2f, 1f, speed))
+            : BlendHue(NormalSpeedColor, FastestColor, Mathf.InverseLerp(1f, 1.5f, speed));
+    }
+
+    // Blends around the colour wheel the short way, so red to green passes orange and yellow instead of brown.
+    private static Color BlendHue(Color from, Color to, float t)
+    {
+        Color.RGBToHSV(from, out float fromHue, out float fromSaturation, out float fromValue);
+        Color.RGBToHSV(to, out float toHue, out float toSaturation, out float toValue);
+        if (toHue - fromHue > 0.5f) fromHue += 1f;
+        else if (fromHue - toHue > 0.5f) toHue += 1f;
+        return Color.HSVToRGB(Mathf.Repeat(Mathf.Lerp(fromHue, toHue, t), 1f),
+            Mathf.Lerp(fromSaturation, toSaturation, t), Mathf.Lerp(fromValue, toValue, t));
     }
 
     public void StartGame()
@@ -125,6 +162,7 @@ public class GameplayManager : MonoBehaviour
         currentState = GameState.Gameplay;
         // Last game's persistent cookies expire once this run has picked them up.
         SaveNextRunSlow(0f);
+        startSpeedBonus = Mathf.Min(menuCookieRain.CookiesBroken, MaxBonusMenuCookies) * BonusPerMenuCookie;
         mainMenu.SetActive(false);
         gameUI.ShowGameplay(carriedSlow);
         statsText.gameObject.SetActive(true);

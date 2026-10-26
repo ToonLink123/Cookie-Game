@@ -120,7 +120,7 @@ public class AdPainter
         int buttonTop = bottom - ButtonHeight - 1;
         FitHeadline(design.headline, areaWidth, bottom - top, out int fullScale);
         FitHeadline(design.headline, areaWidth, buttonTop - 3 - top, out int scaleWithButton);
-        if (label != null && scaleWithButton == fullScale)
+        if (label != null && buttonTop >= top && scaleWithButton == fullScale)
         {
             DrawButton(label, buttonTop, design.buttonFill, design.buttonText);
             bottom = buttonTop - 3;
