@@ -40,6 +40,7 @@ public class ClearDataPickup : MonoBehaviour
         Camera camera = Camera.main;
         float x = camera.transform.position.x + camera.orthographicSize * camera.aspect + size;
         pickup.transform.position = new Vector3(x, y, 0f);
+        MovingCollider.AddBody(pickup);
         pickup.AddComponent<ClearDataPickup>().baseY = y;
     }
 

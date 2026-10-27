@@ -76,6 +76,26 @@ public class AdPainter
         { '%', "##..#/##..#/...#./..#../.#.../#..##/#..##" },
         { '!', "#/#/#/#/#/./#" },
         { ' ', "../../../../../../.." },
+        // More letters, digits and punctuation, so personalised ads can say what the trackers know.
+        { 'G', ".###./#...#/#..../#.###/#...#/#...#/.###." },
+        { 'J', "..###/...#./...#./...#./...#./#..#./.##.." },
+        { 'Q', ".###./#...#/#...#/#...#/#.#.#/#..#./.##.#" },
+        { 'V', "#...#/#...#/#...#/#...#/.#.#./.#.#./..#.." },
+        { 'X', "#...#/#...#/.#.#./..#../.#.#./#...#/#...#" },
+        { 'Z', "#####/....#/...#./..#../.#.../#..../#####" },
+        { '1', ".#./##./.#./.#./.#./.#./###" },
+        { '2', ".###./#...#/....#/...#./..#../.#.../#####" },
+        { '3', "####./....#/....#/.###./....#/....#/####." },
+        { '4', "#..#./#..#./#..#./#####/...#./...#./...#." },
+        { '6', ".###./#..../#..../####./#...#/#...#/.###." },
+        { '7', "#####/....#/...#./..#../..#../..#../..#.." },
+        { '8', ".###./#...#/#...#/.###./#...#/#...#/.###." },
+        { '9', ".###./#...#/#...#/.####/....#/....#/.###." },
+        { '?', ".###./#...#/....#/...#./..#../...../..#.." },
+        { '.', "././././././#" },
+        { ',', "../../../../../.#/#." },
+        { ':', "./#/./././#/." },
+        { '\'', "#/#/././././." },
     };
 
     public static int DesignCount => Designs.Length;
@@ -93,13 +113,22 @@ public class AdPainter
         random = new System.Random(seed);
     }
 
-    public Color32[] Paint(int design)
+    // headline replaces the design's own (letters it can't draw are left out).
+    public Color32[] Paint(int design, string headline = null)
     {
-        Draw(Designs[design]);
+        Draw(Designs[design], headline == null ? Designs[design].headline : Drawable(headline));
         return pixels;
     }
 
-    private void Draw(Design design)
+    private static string Drawable(string text)
+    {
+        System.Text.StringBuilder kept = new System.Text.StringBuilder();
+        foreach (char c in text.ToUpperInvariant())
+            if (Glyphs.ContainsKey(c)) kept.Append(c);
+        return kept.ToString().Trim();
+    }
+
+    private void Draw(Design design, string headline)
     {
         Fill(0, 0, width, height, design.background);
         DrawPattern(design.pattern, design.patternColor);
@@ -118,15 +147,15 @@ public class AdPainter
         // Only add the button when it doesn't force the headline to shrink.
         string label = FitLabel(design.button, areaWidth - 8);
         int buttonTop = bottom - ButtonHeight - 1;
-        FitHeadline(design.headline, areaWidth, bottom - top, out int fullScale);
-        FitHeadline(design.headline, areaWidth, buttonTop - 3 - top, out int scaleWithButton);
+        FitHeadline(headline, areaWidth, bottom - top, out int fullScale);
+        FitHeadline(headline, areaWidth, buttonTop - 3 - top, out int scaleWithButton);
         if (label != null && buttonTop >= top && scaleWithButton == fullScale)
         {
             DrawButton(label, buttonTop, design.buttonFill, design.buttonText);
             bottom = buttonTop - 3;
         }
 
-        List<string> lines = FitHeadline(design.headline, areaWidth, bottom - top, out int scale);
+        List<string> lines = FitHeadline(headline, areaWidth, bottom - top, out int scale);
         if (lines != null)
         {
             int y = top + (bottom - top - BlockHeight(lines.Count, scale)) / 2;

@@ -40,6 +40,11 @@ public class PlayerController : MonoBehaviour
     int persistentEaten;
     float stillY;
     float stillTime;
+    BalloonVisuals visuals;
+
+    // Holding Space (the mouse is for rejecting cookies), past the takeoff.
+    public bool Thrusting => holding && !takingOff;
+    public float VerticalSpeed => vy;
 
     // While tracked (after eating a third-party cookie), new cookies spawn at the player's height.
     public bool IsTracked => trackedTimer > 0f;
@@ -54,8 +59,11 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = 0f;
         rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        rb.sleepMode = RigidbodySleepMode2D.NeverSleep;   // resting on the floor, it must still feel cookies and hazards
         rb.position = new Vector2(rb.position.x, minY);
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
+        visuals = BalloonVisuals.Attach(this, spriteRenderer);
+        spriteRenderer = visuals.Body;
     }
 
     void Start()
@@ -87,8 +95,7 @@ public class PlayerController : MonoBehaviour
         }
 
         var kb = Keyboard.current;
-        var mouse = Mouse.current;
-        holding = (kb != null && kb.spaceKey.isPressed) || (mouse != null && mouse.leftButton.isPressed);
+        holding = kb != null && kb.spaceKey.isPressed;
         bool goingUp = takingOff || vy > 0f || (holding && vy == 0f);
         spriteRenderer.sprite = goingUp ? happySprite : sadSprite;
     }
@@ -132,10 +139,7 @@ public class PlayerController : MonoBehaviour
     {
         if (GameplayManager.currentState != GameState.Gameplay || other.GetComponent<Obstacle>() == null) return;
 
-        GameplayManager.currentState = GameState.GameOver;
-        spriteRenderer.sprite = sadSprite;
-        vy = 0f;
-        rb.linearVelocity = Vector2.zero;
+        Crash();
     }
 
     public void EatCookie(CookieType type)
@@ -144,26 +148,46 @@ public class PlayerController : MonoBehaviour
 
         GameplayManager.cookieCount++;
         GameplayManager.cookiesEaten[(int)type]++;
+        visuals.Crumbs(Cookie.Tint(type));
         switch (type)
         {
             case CookieType.Session:
                 temporarySlow += sessionSlow;
+                FloatingText.AtPlayer(Percent(-sessionSlow) + " speed (for now)", FloatingText.Bad);
                 break;
             case CookieType.Persistent:
                 permanentSlow += persistentSlow;
                 persistentEaten++;
                 GameplayManager.SaveNextRunSlow(persistentEaten * persistentNextRunSlow);
+                FloatingText.AtPlayer(Percent(-persistentSlow) + " speed", FloatingText.Bad);
+                FloatingText.AtPlayer("Saved to your device!", FloatingText.Warning);
                 break;
             case CookieType.ThirdParty:
                 permanentSlow += slowPerCookie;
                 trackedTimer = trackedTime;
                 GameplayManager.trackerCookiesHit++;
+                FloatingText.AtPlayer(Percent(-slowPerCookie) + " speed", FloatingText.Bad);
+                FloatingText.AtPlayer("Tracked!", FloatingText.Tracking);
                 break;
             default:
                 permanentSlow += slowPerCookie;
+                FloatingText.AtPlayer(Percent(-slowPerCookie) + " speed", FloatingText.Bad);
                 break;
         }
         UpdateSpeed();
+    }
+
+    private static string Percent(float change)
+    {
+        return (change > 0f ? "+" : "") + Mathf.RoundToInt(change * 100f) + "%";
+    }
+
+    public void Crash()
+    {
+        GameplayManager.currentState = GameState.GameOver;
+        spriteRenderer.sprite = sadSprite;
+        vy = 0f;
+        rb.linearVelocity = Vector2.zero;
     }
 
     // The "Clear Browsing Data" pickup: back to full speed, no more tracking or ads, and the
@@ -179,6 +203,9 @@ public class PlayerController : MonoBehaviour
         persistentEaten = 0;
         GameplayManager.SaveNextRunSlow(0f);
         UpdateSpeed();
+        visuals.Relieved();
+        FloatingText.AtPlayer("Browsing data cleared!", FloatingText.Good);
+        FloatingText.AtPlayer("Phew! Full speed again", FloatingText.Good);
     }
 
     void UpdateSpeed()

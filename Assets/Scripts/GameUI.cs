@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +13,6 @@ public class GameUI : MonoBehaviour
     [SerializeField] private Sprite creditsArrowSprite;
     [SerializeField] private Sprite titleSprite;
 
-    private static readonly Color Ink = new Color(0.06f, 0.10f, 0.16f);
     // Between the high score text and the start button, leaving room for the hover.
     private static readonly Vector2 TitlePosition = new Vector2(0f, 242f);
     private const float TitleHover = 10f;
@@ -19,20 +20,27 @@ public class GameUI : MonoBehaviour
     // Every cookie type, in the order the legend and game over screen list them; details follow the name.
     private static readonly (CookieType type, string details)[] LegendEntries =
     {
-        (CookieType.FirstParty, "\nFlies straight.\nSlows you 7%."),
-        (CookieType.Session, "\nFast and flickery.\nSlows you 20%, briefly."),
-        (CookieType.ThirdParty, "  (100 m+)\nTracks you! Slows you 7%.\nEat too many and\nobstacles turn into ads."),
-        (CookieType.Persistent, "  (220 m+)\nComes back twice.\nSlows you 10%, and your\nnext game too."),
+        (CookieType.FirstParty, "\nFlies straight. Click once\nto reject. Slows you 7%."),
+        (CookieType.Session, "\nFast, flickery, and expires\nby itself. Slows 20%, briefly."),
+        (CookieType.LegitimateInterest, "  (50 m+)\nTurns itself back on once\nafter you reject it."),
+        (CookieType.ThirdParty, "  (100 m+)\nTracks you and dodges the\ncursor. Too many = ads."),
+        (CookieType.Persistent, "  (220 m+)\n3 clicks to reject. Slows\n10%, and your next game."),
     };
 
-    private Font font;
+    // The game over screen's two glass jars: cookies accepted (eaten) on the left, rejected on the right.
+    private static readonly Vector2 AcceptedJarPosition = new Vector2(-720f, -40f);
+    private static readonly Vector2 RejectedJarPosition = new Vector2(720f, -40f);
+    private static readonly Color Glass = new Color(0.75f, 0.9f, 1f, 0.55f);
+    private const int MaxJarCookies = 35;
+    private const float DropGap = 0.06f;
+    private const float DropTime = 0.35f;
+
     private GameObject trackers;
     private GameObject controls;
     private GameObject credits;
     private GameObject legend;
     private GameObject creditsButton;
     private GameObject legendButton;
-    private GameObject facts;
     private Text cookiesText;
     private Text metersText;
     private Text highScoreText;
@@ -42,17 +50,24 @@ public class GameUI : MonoBehaviour
     private RectTransform startButton;
     private GameObject quitButton;
     private Sprite cookieSprite;
-    private GameObject eatenPanel;
+    private CanvasGroup gameOver;
+    private Text acceptedCount;
+    private Text rejectedCount;
     private Text[] eatenCounts;
+    private RectTransform acceptedJar;
+    private RectTransform rejectedJar;
     private GameObject pauseScreen;
+    private int shownCookies = -1;
+    private int shownMeters = -1;
 
     public void Initialize(float highScore, Sprite cookieSprite, RectTransform startButton)
     {
         this.startButton = startButton;
         this.cookieSprite = cookieSprite;
-        font = LoadFont();
+        UiKit.Setup(GetComponentInParent<Canvas>(), factsBoxSprite, creditsBoxSprite, creditsArrowSprite, cookieSprite);
+
         trackers = CreateRect("Trackers", transform, Vector2.zero, Vector2.zero).gameObject;
-        Stretch(trackers.GetComponent<RectTransform>(), Vector2.zero, Vector2.one);
+        UiKit.Stretch(trackers.GetComponent<RectTransform>());
         cookiesText = CreateTracker("Cookies", cookieTrackerSprite, new Vector2(0f, 1f),
             new Vector2(32f, -32f));
         metersText = CreateTracker("Meters", metersTrackerSprite, Vector2.one,
@@ -84,8 +99,8 @@ public class GameUI : MonoBehaviour
             new Vector2(0.5f, 0.5f), new Vector2(0f, -182f), new Vector2(260f, 75f));
         controls = controlsImage.gameObject;
         Text controlsText = CreateText("ControlsText", controls.transform, new Vector2(0.5f, 0.5f),
-            Vector2.zero, new Vector2(220f, 50f), 19);
-        controlsText.text = "<b>Controls</b>\nSpace to Jump";
+            Vector2.zero, new Vector2(230f, 62f), 19);
+        controlsText.text = "<b>Controls</b>\nSpace to fly\nClick cookies to reject";
 
         Image creditsImage = CreateImage("Credits", transform, creditsBoxSprite,
             new Vector2(1f, 0.5f), new Vector2(-40f, -20f), new Vector2(520f, 760f));
@@ -110,68 +125,83 @@ public class GameUI : MonoBehaviour
         legend = legendImage.gameObject;
         legendImage.raycastTarget = true;   // so clicks on the panel don't pop the menu cookies behind it
         Text legendTitle = CreateText("Title", legend.transform, new Vector2(0.5f, 1f),
-            new Vector2(0f, -75f), new Vector2(440f, 60f), 40);
+            new Vector2(0f, -62f), new Vector2(440f, 60f), 40);
         legendTitle.text = "<b>Cookie Legend</b>";
         for (int i = 0; i < LegendEntries.Length; i++)
         {
-            CreateLegendEntry(LegendEntries[i].type, LegendEntries[i].details, -125f - i * 152f);
+            CreateLegendEntry(LegendEntries[i].type, LegendEntries[i].details, -100f - i * 126f);
         }
         legend.SetActive(false);
 
         creditsButton = CreateMenuButton("Credits", new Vector2(1f, 0f), ToggleCredits);
         legendButton = CreateMenuButton("Legend", Vector2.zero, ToggleLegend);
 
-        Image factsImage = CreateImage("DeathFact", transform, factsBoxSprite, new Vector2(0.5f, 0.5f),
-            new Vector2(0f, 60f), new Vector2(960f, 400f));
-        facts = factsImage.gameObject;
-        factText = CreateText("FactText", facts.transform, new Vector2(0.5f, 0.5f), Vector2.zero,
-            new Vector2(820f, 290f), 34);
-        facts.SetActive(false);
+        BuildGameOver();
+        UpdateTrackers(0, 0f);
+    }
 
-        // Game over: how many of each cookie type the player ate, between the high score and the fact.
-        RectTransform eatenRect = CreateRect("CookiesEaten", transform, new Vector2(0.5f, 1f),
-            new Vector2(1200f, 130f));
+    // Everything on the game over screen sits in one group, so it can fade in together.
+    private void BuildGameOver()
+    {
+        RectTransform group = CreateRect("GameOver", transform, Vector2.zero, Vector2.zero);
+        UiKit.Stretch(group);
+        gameOver = group.gameObject.AddComponent<CanvasGroup>();
+
+        Image factsImage = CreateImage("DeathFact", group, factsBoxSprite, new Vector2(0.5f, 0.5f),
+            new Vector2(0f, 60f), new Vector2(960f, 400f));
+        factText = CreateText("FactText", factsImage.transform, new Vector2(0.5f, 0.5f), Vector2.zero,
+            new Vector2(820f, 290f), 34);
+
+        // How many of each cookie type the player ate, between the high score and the fact.
+        RectTransform eatenRect = CreateRect("CookiesEaten", group, new Vector2(0.5f, 1f), new Vector2(1500f, 70f));
         eatenRect.pivot = new Vector2(0.5f, 1f);
-        eatenRect.anchoredPosition = new Vector2(0f, -110f);
-        eatenPanel = eatenRect.gameObject;
-        Text eatenTitle = CreateText("Title", eatenRect, new Vector2(0.5f, 1f), new Vector2(0f, -20f),
-            new Vector2(600f, 40f), 30);
-        eatenTitle.text = "<b>Cookies eaten</b>";
+        eatenRect.anchoredPosition = new Vector2(0f, -120f);
         eatenCounts = new Text[LegendEntries.Length];
         for (int i = 0; i < LegendEntries.Length; i++)
         {
             CookieType type = LegendEntries[i].type;
-            RectTransform entry = CreateRect(type + "Eaten", eatenRect, new Vector2(0.5f, 0f),
-                new Vector2(290f, 70f));
+            RectTransform entry = CreateRect(type + "Eaten", eatenRect, new Vector2(0.5f, 0f), new Vector2(290f, 70f));
             entry.pivot = new Vector2(0.5f, 0f);
-            entry.anchoredPosition = new Vector2((i - 1.5f) * 300f, 0f);
-            CreateCookieIcon(type, entry, new Vector2(0f, 0.5f), new Vector2(35f, 0f), 56f);
-            Text count = CreateText("Count", entry, new Vector2(1f, 0.5f), Vector2.zero,
-                new Vector2(220f, 60f), 28);
+            entry.anchoredPosition = new Vector2((i - 2f) * 300f, 0f);
+            CreateCookieIcon(type, entry, new Vector2(0f, 0.5f), new Vector2(32f, 0f), 56f);
+            Text count = CreateText("Count", entry, new Vector2(1f, 0.5f), Vector2.zero, new Vector2(226f, 60f), 28);
             count.rectTransform.pivot = new Vector2(1f, 0.5f);
             count.alignment = TextAnchor.MiddleLeft;
             eatenCounts[(int)type] = count;
         }
-        eatenPanel.SetActive(false);
-        UpdateTrackers(0, 0f);
+
+        // The jars are the tall grey box tinted like glass, each with its count underneath.
+        acceptedJar = CreateJar("AcceptedJar", group, AcceptedJarPosition, out acceptedCount);
+        rejectedJar = CreateJar("RejectedJar", group, RejectedJarPosition, out rejectedCount);
+
+        group.gameObject.SetActive(false);
+    }
+
+    private RectTransform CreateJar(string name, Transform parent, Vector2 position, out Text count)
+    {
+        Image jar = UiKit.MakeBox(name, parent, creditsBoxSprite, new Vector2(0.5f, 0.5f), position,
+            new Vector2(240f, 300f));
+        jar.color = Glass;
+        count = CreateText("Count", parent, new Vector2(0.5f, 0.5f), position + Vector2.down * 178f,
+            new Vector2(320f, 40f), 30);
+        UiKit.AddOutline(count, Color.white, 1.5f);
+        return jar.rectTransform;
     }
 
     // Pause screen: dims the game, with resume and quit to home buttons.
     public void CreatePauseScreen(UnityEngine.Events.UnityAction resume, UnityEngine.Events.UnityAction quitToHome)
     {
         // Parented to the canvas itself and drawn last, so it covers everything else on screen.
-        RectTransform screen = CreateRect("PauseScreen", GetComponentInParent<Canvas>().transform,
-            Vector2.zero, Vector2.zero);
-        Stretch(screen, Vector2.zero, Vector2.one);
+        RectTransform screen = UiKit.MakeLayer("PauseScreen");
         Image dim = screen.gameObject.AddComponent<Image>();
         dim.color = new Color(0f, 0f, 0f, 0.5f);   // also stops clicks reaching anything underneath
         pauseScreen = screen.gameObject;
 
         Image panel = CreateImage("Panel", screen, factsBoxSprite, new Vector2(0.5f, 0.5f), Vector2.zero,
             new Vector2(960f, 320f));
-        Text title = CreateText("Title", panel.transform, new Vector2(0.5f, 0.5f), new Vector2(0f, 70f),
+        Text heading = CreateText("Title", panel.transform, new Vector2(0.5f, 0.5f), new Vector2(0f, 70f),
             new Vector2(400f, 70f), 56);
-        title.text = "<b>Paused</b>";
+        heading.text = "<b>Paused</b>";
 
         CreateSpriteButton("Resume", panel.transform, Resources.Load<Sprite>("ResumeButton"),
             new Vector2(-190f, -45f), resume);
@@ -184,12 +214,6 @@ public class GameUI : MonoBehaviour
     {
         pauseScreen.transform.SetAsLastSibling();
         pauseScreen.SetActive(paused);
-    }
-
-    // Hand-drawn font matching the lettering in the UI sprites; built by Tools/CookieFont.
-    public static Font LoadFont()
-    {
-        return Resources.Load<Font>("CookieFont");
     }
 
     void Update()
@@ -211,7 +235,7 @@ public class GameUI : MonoBehaviour
         legend.SetActive(false);
         creditsButton.SetActive(false);
         legendButton.SetActive(false);
-        facts.SetActive(false);
+        gameOver.gameObject.SetActive(false);
         trackers.SetActive(true);
         persistentSlowText.text = "Persistent cookies from last game: "
             + Mathf.RoundToInt(carriedSlow * 100f) + "% slower";
@@ -220,21 +244,87 @@ public class GameUI : MonoBehaviour
 
     public void UpdateTrackers(int cookies, float meters)
     {
-        cookiesText.text = cookies.ToString();
-        metersText.text = Mathf.FloorToInt(meters).ToString();
+        int wholeMeters = Mathf.FloorToInt(meters);
+        if (cookies != shownCookies) cookiesText.text = (shownCookies = cookies).ToString();
+        if (wholeMeters != shownMeters) metersText.text = (shownMeters = wholeMeters).ToString();
     }
 
     public void ShowGameOver(float highScore, bool newHighScore)
     {
         SetHighScore(highScore, newHighScore);
-        factText.text = CookieFacts.RandomFact();
-        facts.SetActive(true);
+        factText.text = CookieFacts.ForRun();
         persistentSlowText.gameObject.SetActive(false);
         for (int i = 0; i < eatenCounts.Length; i++)
         {
             eatenCounts[i].text = Cookie.Name((CookieType)i) + ": " + GameplayManager.cookiesEaten[i];
         }
-        eatenPanel.SetActive(true);
+        gameOver.gameObject.SetActive(true);
+        StartCoroutine(PlayGameOver());
+    }
+
+    // Fades the screen in, then counts the run up while cookies drop into the two jars.
+    private IEnumerator PlayGameOver()
+    {
+        int rejected = GameplayManager.bannersRejected, accepted = GameplayManager.cookieCount + GameplayManager.bannersAccepted;
+        foreach (int count in GameplayManager.cookiesRejected) rejected += count;
+        List<CookieType> eaten = Expand(GameplayManager.cookiesEaten, MaxJarCookies);
+        List<CookieType> trashed = Expand(GameplayManager.cookiesRejected, MaxJarCookies);
+        SetTally(0, 0);
+
+        for (float time = 0f; time < 0.4f; time += Time.unscaledDeltaTime)
+        {
+            gameOver.alpha = time / 0.4f;
+            yield return null;
+        }
+        gameOver.alpha = 1f;
+
+        int drops = Mathf.Max(eaten.Count, trashed.Count);
+        for (int i = 0; i < drops; i++)
+        {
+            if (i < eaten.Count) StartCoroutine(Drop(eaten[i], acceptedJar, JarSlot(i)));
+            if (i < trashed.Count) StartCoroutine(Drop(trashed[i], rejectedJar, JarSlot(i)));
+            float progress = (i + 1f) / drops;
+            SetTally(Mathf.RoundToInt(rejected * progress), Mathf.RoundToInt(accepted * progress));
+            yield return new WaitForSecondsRealtime(DropGap);
+        }
+        SetTally(rejected, accepted);
+    }
+
+    private void SetTally(int rejected, int accepted)
+    {
+        acceptedCount.text = "<b>Accepted: " + accepted + "</b>";
+        rejectedCount.text = "<b>Rejected: " + rejected + "</b>";
+    }
+
+    private static List<CookieType> Expand(int[] counts, int cap)
+    {
+        List<CookieType> cookies = new List<CookieType>();
+        for (int type = 0; type < counts.Length; type++)
+            for (int i = 0; i < counts[type] && cookies.Count < cap; i++) cookies.Add((CookieType)type);
+        return cookies;
+    }
+
+    // Cookies stack up from the bottom of the jar, five to a row.
+    private static Vector2 JarSlot(int index)
+    {
+        return new Vector2(-64f + index % 5 * 32f + Random.Range(-4f, 4f), -100f + index / 5 * 30f);
+    }
+
+    // One cookie falls from above into a jar.
+    private IEnumerator Drop(CookieType type, RectTransform jar, Vector2 landing)
+    {
+        Image icon = CreateCookieIcon(type, jar, new Vector2(0.5f, 0.5f), landing + Vector2.up * 260f, 30f);
+        RectTransform rect = icon.rectTransform;
+        Vector2 from = rect.anchoredPosition;
+        float spin = Random.Range(-360f, 360f);
+        for (float time = 0f; time < DropTime; time += Time.unscaledDeltaTime)
+        {
+            float fall = time / DropTime;
+            rect.anchoredPosition = Vector2.Lerp(from, landing, fall * fall);
+            rect.localRotation = Quaternion.Euler(0f, 0f, spin * fall);
+            yield return null;
+        }
+        rect.anchoredPosition = landing;
     }
 
     private void SetHighScore(float highScore, bool newHighScore)
@@ -305,13 +395,13 @@ public class GameUI : MonoBehaviour
     private void CreateLegendEntry(CookieType type, string details, float y)
     {
         RectTransform entry = CreateRect(type + "Entry", legend.transform, new Vector2(0.5f, 1f),
-            new Vector2(440f, 140f));
+            new Vector2(440f, 122f));
         entry.pivot = new Vector2(0.5f, 1f);
         entry.anchoredPosition = new Vector2(0f, y);
 
-        CreateCookieIcon(type, entry, new Vector2(0f, 0.5f), new Vector2(50f, 0f), 80f);
+        CreateCookieIcon(type, entry, new Vector2(0f, 0.5f), new Vector2(50f, 0f), 72f);
         Text text = CreateText("Description", entry, new Vector2(1f, 0.5f), Vector2.zero,
-            new Vector2(330f, 140f), 26);
+            new Vector2(340f, 122f), 24);
         text.rectTransform.pivot = new Vector2(1f, 0.5f);
         text.alignment = TextAnchor.MiddleLeft;
         text.text = "<b>" + Cookie.Name(type) + "</b>" + details;
@@ -339,52 +429,20 @@ public class GameUI : MonoBehaviour
         return icon;
     }
 
-    private Image CreateImage(string name, Transform parent, Sprite sprite, Vector2 anchor,
+    private static Image CreateImage(string name, Transform parent, Sprite sprite, Vector2 anchor,
         Vector2 position, Vector2 size)
     {
-        RectTransform rect = CreateRect(name, parent, anchor, size);
-        rect.anchoredPosition = position;
-        Image image = rect.gameObject.AddComponent<Image>();
-        image.sprite = sprite;
-        image.raycastTarget = false;
-        return image;
+        return UiKit.MakeImage(name, parent, sprite, anchor, position, size);
     }
 
-    private Text CreateText(string name, Transform parent, Vector2 anchor, Vector2 position,
+    private static Text CreateText(string name, Transform parent, Vector2 anchor, Vector2 position,
         Vector2 size, int fontSize)
     {
-        RectTransform rect = CreateRect(name, parent, anchor, size);
-        rect.anchoredPosition = position;
-        Text text = rect.gameObject.AddComponent<Text>();
-        text.font = font;
-        text.fontSize = fontSize;
-        text.color = Ink;
-        text.alignment = TextAnchor.MiddleCenter;
-        text.supportRichText = true;
-        text.resizeTextForBestFit = true;
-        text.resizeTextMinSize = 18;
-        text.resizeTextMaxSize = fontSize;
-        text.horizontalOverflow = HorizontalWrapMode.Wrap;
-        text.verticalOverflow = VerticalWrapMode.Truncate;
-        text.raycastTarget = false;
-        return text;
+        return UiKit.MakeText(name, parent, anchor, position, size, fontSize);
     }
 
     private static RectTransform CreateRect(string name, Transform parent, Vector2 anchor, Vector2 size)
     {
-        GameObject element = new GameObject(name, typeof(RectTransform));
-        element.layer = LayerMask.NameToLayer("UI");
-        RectTransform rect = element.GetComponent<RectTransform>();
-        rect.SetParent(parent, false);
-        rect.anchorMin = rect.anchorMax = anchor;
-        rect.sizeDelta = size;
-        return rect;
-    }
-
-    private static void Stretch(RectTransform rect, Vector2 min, Vector2 max)
-    {
-        rect.anchorMin = min;
-        rect.anchorMax = max;
-        rect.offsetMin = rect.offsetMax = Vector2.zero;
+        return UiKit.MakeRect(name, parent, anchor, size);
     }
 }

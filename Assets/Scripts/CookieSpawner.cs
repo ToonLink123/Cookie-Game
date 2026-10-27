@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -20,8 +20,11 @@ public class CookieSpawner : MonoBehaviour
     [SerializeField] private float sessionWeight = 20f;
     [SerializeField] private float thirdPartyWeight = 20f;
     [SerializeField] private float persistentWeight = 10f;
+    [SerializeField] private float legitInterestWeight = 15f;
     [SerializeField] private float thirdPartyUnlockDistance = 100f;
     [SerializeField] private float persistentUnlockDistance = 220f;
+    [SerializeField] private float legitInterestUnlockDistance = 50f;
+    [SerializeField] private float turnBackOnDelay = 0.8f;
 
     [Header("Cookies on screen")]
     [SerializeField] private int startMinOnScreen = 1;
@@ -124,10 +127,51 @@ public class CookieSpawner : MonoBehaviour
                 direction = new Vector2(-Mathf.Cos(angle), upOrDown * Mathf.Sin(angle));
             }
 
-            Vector3 spawnPos = new Vector3(spawnX + Random.Range(0f, groupSpread), spawnY);
-            Instantiate(cookiePrefab, spawnPos, Quaternion.identity).GetComponent<Cookie>()
-                .Setup(type, player != null ? player.transform : null, direction);
+            Spawn(type, new Vector3(spawnX + Random.Range(0f, groupSpread), spawnY), direction);
         }
+    }
+
+    private Cookie Spawn(CookieType type, Vector3 position, Vector2 direction)
+    {
+        Cookie cookie = Instantiate(cookiePrefab, position, Quaternion.identity).GetComponent<Cookie>();
+        cookie.Setup(type, player != null ? player.transform : null, direction);
+        return cookie;
+    }
+
+    // "Accept All" on a consent banner lets every kind of cookie in at once, all headed your way.
+    public void SpawnConsentWave(int count)
+    {
+        if (player == null) player = FindAnyObjectByType<PlayerController>();
+        if (player == null) return;
+
+        Camera mainCamera = Camera.main;
+        float spawnX = mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect + 1f;
+        int typeCount = System.Enum.GetValues(typeof(CookieType)).Length;
+        for (int i = 0; i < count; i++)
+        {
+            Vector3 position = new Vector3(spawnX + i * 0.9f,
+                Mathf.Clamp(player.transform.position.y + Random.Range(-1.5f, 1.5f), minY, maxY));
+            Spawn((CookieType)Random.Range(0, typeCount), position,
+                (player.transform.position - position).normalized);
+        }
+    }
+
+    // A rejected legitimate interest cookie comes back from the right a moment later, once.
+    public void TurnBackOn(float y)
+    {
+        StartCoroutine(TurnBackOnLater(y));
+    }
+
+    private IEnumerator TurnBackOnLater(float y)
+    {
+        yield return new WaitForSeconds(turnBackOnDelay);
+        while (GameplayManager.currentState == GameState.Paused) yield return null;
+        if (GameplayManager.currentState != GameState.Gameplay) yield break;
+
+        Camera mainCamera = Camera.main;
+        float rightEdge = mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect;
+        Spawn(CookieType.LegitimateInterest, new Vector3(rightEdge + 1f, y), Vector2.left).MarkTurnedBackOn();
+        FloatingText.AtWorld(new Vector3(rightEdge - 2.5f, y), "Turned itself back on!", FloatingText.Warning);
     }
 
     private CookieType RandomCookieType()
@@ -135,10 +179,12 @@ public class CookieSpawner : MonoBehaviour
         float meters = GameplayManager.metersTraveled;
         float thirdParty = meters >= thirdPartyUnlockDistance ? thirdPartyWeight : 0f;
         float persistent = meters >= persistentUnlockDistance ? persistentWeight : 0f;
-        float roll = Random.Range(0f, firstPartyWeight + sessionWeight + thirdParty + persistent);
+        float legit = meters >= legitInterestUnlockDistance ? legitInterestWeight : 0f;
+        float roll = Random.Range(0f, firstPartyWeight + sessionWeight + thirdParty + persistent + legit);
         if ((roll -= firstPartyWeight) <= 0f) return CookieType.FirstParty;
         if ((roll -= sessionWeight) <= 0f) return CookieType.Session;
         if ((roll -= thirdParty) <= 0f) return CookieType.ThirdParty;
+        if ((roll -= legit) <= 0f) return CookieType.LegitimateInterest;
         return CookieType.Persistent;
     }
 

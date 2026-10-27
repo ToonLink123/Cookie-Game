@@ -1,4 +1,4 @@
-
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -23,6 +23,9 @@ public class GameplayManager : MonoBehaviour
     public static float difficultyUpdater = 0f;
     public static int[] cookiesEaten;   // this run, indexed by CookieType
     public static int trackerCookiesHit;   // since the last Clear Browsing Data; drives the ads
+    public static int[] cookiesRejected;   // clicked away this run, indexed by CookieType
+    public static int bannersAccepted;
+    public static int bannersRejected;
 
     private const string HighScoreKey = "CookieGame.HighScoreMeters";
     public static float HighScore { get; private set; }
@@ -44,7 +47,11 @@ public class GameplayManager : MonoBehaviour
 
     private static bool restarting;
     private bool gameOverHandled;
+    private bool changingScreens;
     private GameObject homeButton;
+
+    private const float GameOverScreenDelay = 0.9f;   // lets the crash play out first
+    private int shownSpeedPercent = int.MinValue;
 
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject player;
@@ -63,11 +70,14 @@ public class GameplayManager : MonoBehaviour
         cookieCount = 0;
         difficultyUpdater = 0f;
         cookiesEaten = new int[System.Enum.GetValues(typeof(CookieType)).Length];
+        cookiesRejected = new int[cookiesEaten.Length];
         trackerCookiesHit = 0;
+        bannersAccepted = 0;
+        bannersRejected = 0;
         HighScore = PlayerPrefs.GetFloat(HighScoreKey, 0f);
         carriedSlow = PlayerPrefs.GetFloat(NextRunSlowKey, 0f);
         startSpeedBonus = 0f;
-        statsText.font = GameUI.LoadFont();
+        statsText.font = UiKit.Font;
         Outline outline = statsText.gameObject.AddComponent<Outline>();
         outline.effectColor = Color.black;
         outline.effectDistance = new Vector2(1.5f, 1.5f);
@@ -77,9 +87,17 @@ public class GameplayManager : MonoBehaviour
         player.SetActive(false);
         cookieSpawner.enabled = false;
         gameUI.Initialize(HighScore, cookieSpawner.CookieSprite, mainMenu.GetComponent<RectTransform>());
-        gameUI.CreatePauseScreen(ResumeGame, GoToHomeScreen);
         menuCookieRain = gameObject.AddComponent<MenuCookieRain>();
         menuCookieRain.Initialize(cookieSpawner.CookiePrefab);
+
+        // In-game systems, each on its own layer of the UI: created in drawing order, bottom to top.
+        gameObject.AddComponent<CookieRejecter>();
+        gameObject.AddComponent<ConsentBanner>().Initialize(cookieSpawner);
+        BrowserToasts.Create();
+        DataProfile.Create();
+        FloatingText.Create();
+        gameUI.CreatePauseScreen(ResumeGame, GoToHomeScreen);
+        ScreenEffects.Create(0.35f);
     }
 
     void Start()
@@ -87,7 +105,7 @@ public class GameplayManager : MonoBehaviour
         if (!restarting) return;
 
         restarting = false;
-        StartGame();
+        BeginRun();
     }
 
     void Update()
@@ -126,13 +144,19 @@ public class GameplayManager : MonoBehaviour
             }
 
             cookieSpawner.enabled = false;
-            gameUI.ShowGameOver(HighScore, newHighScore);
-            restartButton.SetActive(true);
-            homeButton.SetActive(true);
+            ScreenEffects.Flash(0.6f, 0.3f);
+            ScreenEffects.Shake(0.35f, 0.3f);
+            StartCoroutine(ShowGameOverLater(newHighScore));
         }
 
-        statsText.text = "Speed: " + (characterSpeed * 100f).ToString("0") + "%";
-        statsText.color = SpeedColor(characterSpeed);
+        // Text is only rewritten when the number changes, rather than making a new string every frame.
+        int speedPercent = Mathf.RoundToInt(characterSpeed * 100f);
+        if (speedPercent != shownSpeedPercent)
+        {
+            shownSpeedPercent = speedPercent;
+            statsText.text = "Speed: " + speedPercent + "%";
+            statsText.color = SpeedColor(characterSpeed);
+        }
         gameUI.UpdateTrackers(cookieCount, metersTraveled);
     }
 
@@ -155,10 +179,30 @@ public class GameplayManager : MonoBehaviour
             Mathf.Lerp(fromSaturation, toSaturation, t), Mathf.Lerp(fromValue, toValue, t));
     }
 
+    private IEnumerator ShowGameOverLater(bool newHighScore)
+    {
+        yield return new WaitForSecondsRealtime(GameOverScreenDelay);
+        gameUI.ShowGameOver(HighScore, newHighScore);
+        restartButton.SetActive(true);
+        homeButton.SetActive(true);
+    }
+
+    // The Start button: a quick fade through black into the run.
     public void StartGame()
     {
-        if (currentState != GameState.MainMenu) return;
+        if (currentState != GameState.MainMenu || changingScreens) return;
 
+        changingScreens = true;
+        ScreenEffects.FadeTo(1f, 0.2f, () =>
+        {
+            BeginRun();
+            ScreenEffects.FadeTo(0f, 0.3f, null);
+        });
+    }
+
+    private void BeginRun()
+    {
+        changingScreens = false;
         currentState = GameState.Gameplay;
         // Last game's persistent cookies expire once this run has picked them up.
         SaveNextRunSlow(0f);
@@ -178,18 +222,25 @@ public class GameplayManager : MonoBehaviour
 
     public void RestartGame()
     {
-        if (currentState != GameState.GameOver) return;
+        if (currentState != GameState.GameOver || changingScreens) return;
 
         restarting = true;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        ReloadScene();
     }
 
     // Reloading without the restarting flag lands on the home screen instead of a new run.
     public void GoToHomeScreen()
     {
-        if (currentState != GameState.GameOver && currentState != GameState.Paused) return;
+        if ((currentState != GameState.GameOver && currentState != GameState.Paused) || changingScreens) return;
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        ReloadScene();
+    }
+
+    // Fades to black first; the reloaded scene fades back in.
+    private void ReloadScene()
+    {
+        changingScreens = true;
+        ScreenEffects.FadeTo(1f, 0.25f, () => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex));
     }
 
     public static void QuitGame()

@@ -15,11 +15,16 @@ public class ObstacleSpawner : MonoBehaviour
     private const float CometArtAngle = 46f;
     private const float MinCometAngle = 25f;
     private const float MaxCometAngle = 55f;
+    private const float CometSpeed = 7f;
+    private const float BirdSpeed = 5f;
+    private const float BeanstalkSpeed = 3f;
+    private const float CometWarning = 0.9f;   // seconds a comet's arrow shows before it comes into view
 
     private Camera mainCamera;
     private PlayerController player;
     private float spawnTimer;
     private float campingTimer;
+    private WarningMarker campingArrow;
 
     void Start()
     {
@@ -41,6 +46,16 @@ public class ObstacleSpawner : MonoBehaviour
         // Staying in one spot too long brings hazards straight at that height until the player moves.
         if (player != null && player.IsCamping)
         {
+            // An arrow at the right edge, level with the player, shows where the hazards will come from.
+            Vector3 arrowAt = new Vector3(mainCamera.transform.position.x + mainCamera.orthographicSize * mainCamera.aspect - 0.6f,
+                player.transform.position.y, 0f);
+            if (campingArrow == null)
+            {
+                campingArrow = WarningMarker.Arrow(arrowAt, 0f, null, 0f);
+                FloatingText.AtPlayer("Don't sit still!", FloatingText.Warning);
+            }
+            campingArrow.MoveTo(arrowAt);
+
             campingTimer -= Time.deltaTime;
             if (campingTimer <= 0f)
             {
@@ -51,6 +66,7 @@ public class ObstacleSpawner : MonoBehaviour
         else
         {
             campingTimer = 0f;
+            if (campingArrow != null) Destroy(campingArrow.gameObject);
         }
 
         spawnTimer -= Time.deltaTime * GameplayManager.overallSpeed;
@@ -79,7 +95,7 @@ public class ObstacleSpawner : MonoBehaviour
         float scale = height / sprite.bounds.size.y;
         if (ad)
         {
-            spriteRenderer.sprite = AdBox.Create(obstacle, sprite.bounds.size * scale);
+            spriteRenderer.sprite = AdBox.Create(obstacle, sprite.bounds.size * scale, DataProfile.PersonalizedHeadline());
         }
         else
         {
@@ -90,6 +106,7 @@ public class ObstacleSpawner : MonoBehaviour
         if (comet)
         {
             direction = AimComet(obstacle.transform, spriteRenderer.bounds.extents.magnitude, !ad, targetY);
+            WarnOfComet(obstacle.transform, spriteRenderer, direction);
         }
         else
         {
@@ -123,10 +140,28 @@ public class ObstacleSpawner : MonoBehaviour
             }
         }
 
+        MovingCollider.AddBody(obstacle);
         Obstacle movement = obstacle.AddComponent<Obstacle>();
-        movement.speed = comet ? 7f : bird ? 5f : 3f;
+        movement.speed = comet ? CometSpeed : bird ? BirdSpeed : BeanstalkSpeed;
         movement.direction = direction;
         if (bird && !ad) movement.frames = birdFrames;
+    }
+
+    // Puts a blinking arrow where the comet will come in, pointing back at it, and starts the comet a bit
+    // further back along its path so the arrow shows for a moment before it arrives.
+    private void WarnOfComet(Transform comet, SpriteRenderer spriteRenderer, Vector2 direction)
+    {
+        Vector3 cameraPosition = mainCamera.transform.position;
+        float halfWidth = mainCamera.orthographicSize * mainCamera.aspect;
+        float top = cameraPosition.y + mainCamera.orthographicSize;
+        // It starts just above the top edge; follow its path down to the edge to find where it enters.
+        float down = Mathf.Max(0.01f, -direction.y);
+        float entryX = comet.position.x + direction.x * (comet.position.y - top) / down;
+        Vector3 arrowAt = new Vector3(Mathf.Clamp(entryX, cameraPosition.x - halfWidth + 0.6f, cameraPosition.x + halfWidth - 0.6f),
+            top - 0.6f, 0f);
+        float pointing = Mathf.Atan2(-direction.y, -direction.x) * Mathf.Rad2Deg;
+        WarningMarker.Arrow(arrowAt, pointing, spriteRenderer, CometWarning + 2f);
+        comet.position -= (Vector3)(direction * CometSpeed * GameplayManager.overallSpeed * CometWarning);
     }
 
     // Places a comet just above the top right of the screen and returns its fall direction: a

@@ -10,8 +10,9 @@ public class AdBox : MonoBehaviour
     private Texture2D texture;
     private Sprite sprite;
 
-    // Draws a random ad of the given world size onto the object and returns its sprite.
-    public static Sprite Create(GameObject obstacle, Vector2 size)
+    // Draws a random ad of the given world size onto the object and returns its sprite. A headline
+    // (like one quoting the player's data profile) replaces the design's own.
+    public static Sprite Create(GameObject obstacle, Vector2 size, string headline = null)
     {
         int width = Mathf.RoundToInt(size.x * PixelsPerUnit);
         int height = Mathf.RoundToInt(size.y * PixelsPerUnit);
@@ -21,9 +22,11 @@ public class AdBox : MonoBehaviour
         ad.texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
         ad.texture.filterMode = FilterMode.Point;
         ad.texture.wrapMode = TextureWrapMode.Clamp;
-        ad.texture.SetPixels32(painter.Paint(Random.Range(0, AdPainter.DesignCount)));
+        ad.texture.SetPixels32(painter.Paint(Random.Range(0, AdPainter.DesignCount), headline));
         ad.texture.Apply();
-        ad.sprite = Sprite.Create(ad.texture, new Rect(0f, 0f, width, height), new Vector2(0.5f, 0.5f), PixelsPerUnit);
+        // Ads are rectangles, so a plain quad does; the default tight mesh traces the outline of every pixel.
+        ad.sprite = Sprite.Create(ad.texture, new Rect(0f, 0f, width, height), new Vector2(0.5f, 0.5f), PixelsPerUnit,
+            0, SpriteMeshType.FullRect);
         return ad.sprite;
     }
 
