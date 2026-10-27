@@ -192,6 +192,15 @@ public class GameplayManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    public static void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;   // Application.Quit does nothing in the editor
+#else
+        Application.Quit();
+#endif
+    }
+
     // Everything that moves already stops whenever the state isn't Gameplay.
     public void PauseGame()
     {

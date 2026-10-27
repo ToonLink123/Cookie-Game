@@ -40,6 +40,7 @@ public class GameUI : MonoBehaviour
     private Text persistentSlowText;
     private RectTransform title;
     private RectTransform startButton;
+    private GameObject quitButton;
     private Sprite cookieSprite;
     private GameObject eatenPanel;
     private Text[] eatenCounts;
@@ -76,9 +77,11 @@ public class GameUI : MonoBehaviour
         if (titleSprite == null) Debug.LogWarning("GameUI: drag Assets/Art/UI/cookieTitle.png into Title Sprite.");
         title = titleImage.rectTransform;
 
-        // Same top edge as before so it still sits just under the start button.
+        // Quit sits just under the start button, and the controls box just under that.
+        quitButton = CreateSpriteButton("Quit", transform, Resources.Load<Sprite>("QuitButton"),
+            new Vector2(0f, -90f), GameplayManager.QuitGame);
         Image controlsImage = CreateImage("Controls", transform, controlsBoxSprite,
-            new Vector2(0.5f, 0.5f), new Vector2(0f, -118f), new Vector2(260f, 75f));
+            new Vector2(0.5f, 0.5f), new Vector2(0f, -182f), new Vector2(260f, 75f));
         controls = controlsImage.gameObject;
         Text controlsText = CreateText("ControlsText", controls.transform, new Vector2(0.5f, 0.5f),
             Vector2.zero, new Vector2(220f, 50f), 19);
@@ -202,6 +205,7 @@ public class GameUI : MonoBehaviour
     public void ShowGameplay(float carriedSlow)
     {
         title.gameObject.SetActive(false);
+        quitButton.SetActive(false);
         controls.SetActive(false);
         credits.SetActive(false);
         legend.SetActive(false);
@@ -273,7 +277,7 @@ public class GameUI : MonoBehaviour
     }
 
     // A sprite button that looks and reacts like the scene's Start and Restart buttons (sprite at 4x).
-    private void CreateSpriteButton(string name, Transform parent, Sprite sprite, Vector2 position,
+    private GameObject CreateSpriteButton(string name, Transform parent, Sprite sprite, Vector2 position,
         UnityEngine.Events.UnityAction onClick)
     {
         Image image = CreateImage(name + "Button", parent, sprite, new Vector2(0.5f, 0.5f), position,
@@ -283,6 +287,7 @@ public class GameUI : MonoBehaviour
         Button button = image.gameObject.AddComponent<Button>();
         button.targetGraphic = image;
         button.onClick.AddListener(onClick);
+        return image.gameObject;
     }
 
     private Text CreateTracker(string label, Sprite sprite, Vector2 anchor, Vector2 position)
